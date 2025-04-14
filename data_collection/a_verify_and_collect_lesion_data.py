@@ -55,17 +55,17 @@ for path in local_nifti:
     # lesion size with binarisation at p>0.5
     lesion_size_p05 = (data_arr > THRESHOLD_50PERC_PROB).sum() * voxel_volume_mm3
 
-    subject_id = path.stem.replace()
+    subject_id = path.stem.replace("wroifinal", "Subject_")
 
     metadata = {
-        "path": str(path),
+        "NiftiPath": str(path),
         "SubjectID": subject_id,
-        "shape": shape,
-        "voxel_sizes": voxel_sizes,
-        "voxel_volume_ml": voxel_volume_mm3,
-        "affine": affine.tolist(),
-        "lesion_size_p02": lesion_size_p02,
-        "lesion_size_p05": lesion_size_p05,
+        "Shape": shape,
+        "VoxelSizes": voxel_sizes,
+        "VoxelVolumeML": voxel_volume_mm3,
+        "Affine": affine.tolist(),
+        "LesionSize_p02": lesion_size_p02,
+        "LesionSsize_p05": lesion_size_p05,
     }
     image_data_list.append(metadata)
 
@@ -73,18 +73,18 @@ data_df = pd.DataFrame(image_data_list)
 
 # %%
 # verify formatting consistency
-if data_df["shape"].nunique() == 1:
+if data_df["Shape"].nunique() == 1:
     print("Image shapes are identical.")
 else:
     print("WARNING: Image shapes are NOT identical.")
 
-if data_df["voxel_sizes"].nunique() == 1:
+if data_df["VoxelSizes"].nunique() == 1:
     print("Voxel sizes are identical.")
 else:
     print("WARNING: Voxel sizes are NOT identical.")
 
-reference = data_df["affine"].iloc[0]
-all_equal = data_df["affine"].apply(lambda x: np.array_equal(x, reference)).all()
+reference = data_df["Affine"].iloc[0]
+all_equal = data_df["Affine"].apply(lambda x: np.array_equal(x, reference)).all()
 
 if all_equal:
     print("Affines are identical.")
@@ -93,6 +93,6 @@ else:
 
 # %%
 output_name = Path(__file__).with_suffix(".csv")
-data_df.to_csv(output_name, index=False)
+data_df.to_csv(output_name, index=False, sep=";")
 
 # %%
