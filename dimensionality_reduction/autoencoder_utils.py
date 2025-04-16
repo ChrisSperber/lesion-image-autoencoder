@@ -3,7 +3,6 @@
 import nibabel as nib
 import numpy as np
 import torch
-
 from utils import pad_to_shape
 
 TARGET_SHAPE = (80, 96, 80)
@@ -31,7 +30,7 @@ class LesionDataset(torch.utils.data.Dataset):
 
     """
 
-    def __init__(
+    def __init__(  # noqa: D107
         self, nii_paths, pad_to=TARGET_SHAPE, threshold=0.2, binarize=False
     ):  # noqa: D107
         self.nii_paths = nii_paths
