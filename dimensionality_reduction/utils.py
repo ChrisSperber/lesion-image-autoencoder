@@ -1,5 +1,7 @@
 """Utiliy objects."""
 
+from typing import Literal
+
 import nibabel as nib
 import numpy as np
 
@@ -66,3 +68,53 @@ def load_vectorised_images(lesion_path_list: list[str]) -> np.ndarray:
         data = img.get_fdata(dtype=np.float32)
         images.append(data.ravel())
     return np.stack(images)
+
+
+def compute_reconstruction_error(
+    original: np.ndarray,
+    reconstructed: np.ndarray,
+    mode: Literal["continuous", "binary"] = "continuous",
+) -> float:
+    """Compute a reconstruction error between two arrays.
+
+    Measure is chosen based on mode either as mean absolute error (continuous) or 1 - Dice (binary).
+
+    Args:
+        original: The original image (any shape).
+        reconstructed: The reconstructed image (same shape as original).
+        mode: Either 'continuous' or 'binary'. In binary mode, inputs must be exactly 0 or 1.
+
+    Returns:
+        float: Reconstruction error.
+
+    Raises:
+        ValueError: If shapes mismatch or binary inputs aren't valid.
+
+    """
+    if original.shape != reconstructed.shape:
+        raise ValueError(f"Shape mismatch: {original.shape} vs. {reconstructed.shape}")
+
+    if mode == "continuous":
+        return np.mean(np.abs(original - reconstructed))  # mean absolute error
+
+    elif mode == "binary":
+        # Ensure binary (exactly 0 or 1)
+        if not (
+            np.isin(original, [0, 1]).all() and np.isin(reconstructed, [0, 1]).all()
+        ):
+            raise ValueError(
+                "In 'binary' mode, both inputs must contain only 0 and 1 values."
+            )
+
+        intersection = np.sum(original * reconstructed)
+        total = np.sum(original) + np.sum(reconstructed)
+
+        if total == 0:
+            # Both empty masks — define Dice as 1 (i.e., perfect match), so error is 0
+            return 0.0
+
+        dice_score = 2 * intersection / total
+        return 1.0 - dice_score
+
+    else:
+        raise ValueError(f"Unsupported mode: {mode}. Choose 'continuous' or 'binary'.")
