@@ -8,7 +8,9 @@ at p=0.5.
 Logistic PCA was tested but was found to be unsuited for the large data.
 
 Outputs:
-    A csv with the reconstruction loss for each lesion and method.
+    - a csv with the reconstruction loss for each lesion and method.
+    - a npz with the compressed data in a subjects by components 2D format stored in dedicated
+        output folder
 """
 
 # %%
@@ -30,12 +32,15 @@ LESION_PATH_COLUMN = "NiftiPath"
 
 SUBJECT_ID = "SubjectID"
 
+# folder to store the compressed data
+OUTPUT_DIR_COMPRESSED_DATA = "output_compressed_images"
+
 # set the total amount of variance the latent variables should explain for PCA
 PROPORTION_VARIANCE_EXPLAINED = 0.85
-# to apply continuous methods on binary data, reconstructed data are binarised at this threshold
+# to apply continuous methods on binary data, reconstructed data are binarised at 0.5
 BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
-DEBUG_MODE: bool = True
+MAXIMUM_ITERATIONS_NMF = 300  # default 200 gave warning, hence increased
 
 # %%
 # load data as 2D array, i.e. with vectorised images
@@ -46,6 +51,8 @@ data_df = pd.read_csv(
 images_2d_arr = load_vectorised_images(data_df[LESION_PATH_COLUMN].tolist())
 images_2d_arr_binary = (images_2d_arr > BINARISATION_THRESHOLD).astype(np.uint8)
 
+output_base_path = Path(__file__).parent / OUTPUT_DIR_COMPRESSED_DATA
+output_base_path.mkdir(exist_ok=True)
 
 #####################
 # continuous analyses
@@ -94,7 +101,10 @@ for _i, (orig, recon) in enumerate(
 
 # %%
 # non-negative matrix factorisation (NMF) on continuous data
-model = NMF(n_components=n_latents, random_state=RNG_SEED)
+print("Warning, NMF computation may take several minutes up to hours!")
+model = NMF(
+    n_components=n_latents, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
+)
 X_nmf = model.fit_transform(images_2d_arr)
 
 # Reconstruct to approximate original space and binarise
@@ -122,10 +132,10 @@ for _i, (orig, recon) in enumerate(
 # %%
 # standard PCA on binary data
 pca = PCA(n_components=n_latents)
-images_pca = pca.fit_transform(images_2d_arr_binary)
+images_pca_binary = pca.fit_transform(images_2d_arr_binary)
 # Reconstruct components back to original space and binarise
 images_2d_arr_reconstructed_pca_binary = (
-    pca.inverse_transform(images_pca) > BINARISATION_THRESHOLD_OUTPUTS
+    pca.inverse_transform(images_pca_binary) > BINARISATION_THRESHOLD_OUTPUTS
 ).astype(np.uint8)
 
 # evaluate reconstruction
@@ -141,18 +151,18 @@ for _i, (orig, recon) in enumerate(
 # %%
 # Truncated singular value decomposition on binary data
 svd = TruncatedSVD(n_components=n_latents)  # use the same number of components here
-images_svd = svd.fit_transform(images_2d_arr_binary)
+images_svd_binary = svd.fit_transform(images_2d_arr_binary)
 
 # Reconstruct the original-like array
 images_2d_arr_reconstructed_truncsvd_binary = (
-    svd.inverse_transform(images_svd) > BINARISATION_THRESHOLD_OUTPUTS
+    svd.inverse_transform(images_svd_binary) > BINARISATION_THRESHOLD_OUTPUTS
 ).astype(np.uint8)
 
 # evaluate reconstruction
 reconstruction_output_truncsvd_binary = []
 # Loop through each image and its reconstruction
 for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr, images_2d_arr_reconstructed_truncsvd_binary, strict=True)
+    zip(images_2d_arr_binary, images_2d_arr_reconstructed_truncsvd_binary, strict=True)
 ):
     reconstruction_output_truncsvd.append(
         compute_reconstruction_error(orig, recon, mode="binary")
@@ -160,10 +170,12 @@ for _i, (orig, recon) in enumerate(
 
 # %%
 # non-negative matrix factorisation (NMF) on binary data
-model = NMF(n_components=n_latents, random_state=RNG_SEED)
-X_nmf = model.fit_transform(images_2d_arr_binary)
+model = NMF(
+    n_components=n_latents, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
+)
+X_nmf_binary = model.fit_transform(images_2d_arr_binary)
 # Reconstruct to approximate original space and binarise
-images_reconstructed_nmf_continuous = np.dot(X_nmf, model.components_)
+images_reconstructed_nmf_continuous = np.dot(X_nmf_binary, model.components_)
 images_2d_arr_reconstructed_nmf_binary = (
     images_reconstructed_nmf_continuous > BINARISATION_THRESHOLD_OUTPUTS
 ).astype(np.uint8)
@@ -191,6 +203,17 @@ results_df = pd.DataFrame(
         "ReconstructionBinaryTruncSVD": reconstruction_output_truncsvd_binary,
         "ReconstructionBinaryNMF": reconstruction_output_nmf_binary,
     }
+)
+
+filename = output_base_path / "compressed_images_pca_svd_nmf"
+np.savez(
+    filename,
+    images_pca_cont=images_pca,
+    images_svd_cont=images_svd,
+    images_nmf_cont=X_nmf,
+    images_pca_binary=images_pca_binary,
+    images_svd_binary=images_svd_binary,
+    images_nmf_binary=X_nmf_binary,
 )
 
 output_name = Path(__file__).with_suffix(".csv")
