@@ -5,6 +5,9 @@ from typing import Literal
 import nibabel as nib
 import numpy as np
 
+BINARISATION_THRESHOLD = 0.2  # global defining a cutoff to binarise original lesions
+RNG_SEED = 9001
+
 
 def pad_to_shape(img: np.ndarray, target_shape: tuple):
     """Pad image with 0s to match target shape.
