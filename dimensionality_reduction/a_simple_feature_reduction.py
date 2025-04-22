@@ -164,7 +164,7 @@ reconstruction_output_truncsvd_binary = []
 for _i, (orig, recon) in enumerate(
     zip(images_2d_arr_binary, images_2d_arr_reconstructed_truncsvd_binary, strict=True)
 ):
-    reconstruction_output_truncsvd.append(
+    reconstruction_output_truncsvd_binary.append(
         compute_reconstruction_error(orig, recon, mode="binary")
     )
 
