@@ -5,7 +5,7 @@ it might be better at handling lesion data) and non-negative matrix factorisatio
 Methods are either used on the continuous segmentation data or binarised segmentation maps that were
 binarised to 1|0 at BINARISATION_THRESHOLD, with subsequent binarisation of reconstructed maps at
 at p=0.5.
-Logistic PCA was tested but was found to be unsuited for the large data.
+Logistic PCA was tested but was found to be unsuited for the large dataset.
 
 Outputs:
     - a csv with the reconstruction loss for each lesion and method.
@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import NMF, PCA, TruncatedSVD
 from utils import (
-    BINARISATION_THRESHOLD,
+    BINARISATION_THRESHOLD_ORIG_LESION,
     RNG_SEED,
     compute_reconstruction_error,
     load_vectorised_images,
@@ -35,8 +35,8 @@ SUBJECT_ID = "SubjectID"
 # folder to store the compressed data
 OUTPUT_DIR_COMPRESSED_DATA = "output_compressed_images"
 
-# set the total amount of variance the latent variables should explain for PCA
-PROPORTION_VARIANCE_EXPLAINED = 0.85
+# set the total amount of variance the latent variables should explain for PCA with continuous data
+PROPORTION_VARIANCE_EXPLAINED = 0.70
 # to apply continuous methods on binary data, reconstructed data are binarised at 0.5
 BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
@@ -49,7 +49,9 @@ data_df = pd.read_csv(
 )
 
 images_2d_arr = load_vectorised_images(data_df[LESION_PATH_COLUMN].tolist())
-images_2d_arr_binary = (images_2d_arr > BINARISATION_THRESHOLD).astype(np.uint8)
+images_2d_arr_binary = (images_2d_arr > BINARISATION_THRESHOLD_ORIG_LESION).astype(
+    np.uint8
+)
 
 output_base_path = Path(__file__).parent / OUTPUT_DIR_COMPRESSED_DATA
 output_base_path.mkdir(exist_ok=True)
@@ -69,17 +71,19 @@ images_2d_arr_reconstructed_pca = pca.inverse_transform(images_pca)
 # evaluate reconstruction
 reconstruction_output_pca = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr, images_2d_arr_reconstructed_pca, strict=True)
-):
-    reconstruction_output_pca.append(
-        compute_reconstruction_error(orig, recon, mode="continuous")
-    )
+reconstruction_output_pca = [
+    compute_reconstruction_error(orig, recon, mode="continuous")
+    for orig, recon in zip(images_2d_arr, images_2d_arr_reconstructed_pca, strict=True)
+]
+
 
 # %%
 total_explained_variance = np.cumsum(pca.explained_variance_ratio_)
 n_latents = pca.n_components_
-print(f"Number of latent variables is {n_latents}")
+print(
+    f"Number of latent variables is {n_latents} explaining {total_explained_variance[-1]}% of"
+    "variance in the PCA with continuous data"
+)
 
 # %%
 # Truncated singular value decomposition on continuous data
@@ -92,12 +96,12 @@ images_2d_arr_reconstructed_truncsvd = svd.inverse_transform(images_svd)
 # evaluate reconstruction
 reconstruction_output_truncsvd = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr, images_2d_arr_reconstructed_truncsvd, strict=True)
-):
-    reconstruction_output_truncsvd.append(
-        compute_reconstruction_error(orig, recon, mode="continuous")
+reconstruction_output_truncsvd = [
+    compute_reconstruction_error(orig, recon, mode="continuous")
+    for orig, recon in zip(
+        images_2d_arr, images_2d_arr_reconstructed_truncsvd, strict=True
     )
+]
 
 # %%
 # non-negative matrix factorisation (NMF) on continuous data
@@ -107,18 +111,16 @@ model = NMF(
 )
 X_nmf = model.fit_transform(images_2d_arr)
 
-# Reconstruct to approximate original space and binarise
+# Reconstruct to original space and binarise
 images_2d_arr_reconstructed_nmf = np.dot(X_nmf, model.components_)
 
 # evaluate reconstruction
 reconstruction_output_nmf = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr, images_2d_arr_reconstructed_nmf, strict=True)
-):
-    reconstruction_output_nmf.append(
-        compute_reconstruction_error(orig, recon, mode="continuous")
-    )
+reconstruction_output_nmf = [
+    compute_reconstruction_error(orig, recon, mode="continuous")
+    for orig, recon in zip(images_2d_arr, images_2d_arr_reconstructed_nmf, strict=True)
+]
 
 #####################
 # binary analyses
@@ -141,12 +143,12 @@ images_2d_arr_reconstructed_pca_binary = (
 # evaluate reconstruction
 reconstruction_output_pca_binary = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr_binary, images_2d_arr_reconstructed_pca_binary, strict=True)
-):
-    reconstruction_output_pca_binary.append(
-        compute_reconstruction_error(orig, recon, mode="binary")
+reconstruction_output_pca_binary = [
+    compute_reconstruction_error(orig, recon, mode="binary")
+    for orig, recon in zip(
+        images_2d_arr_binary, images_2d_arr_reconstructed_pca_binary, strict=True
     )
+]
 
 # %%
 # Truncated singular value decomposition on binary data
@@ -161,12 +163,12 @@ images_2d_arr_reconstructed_truncsvd_binary = (
 # evaluate reconstruction
 reconstruction_output_truncsvd_binary = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr_binary, images_2d_arr_reconstructed_truncsvd_binary, strict=True)
-):
-    reconstruction_output_truncsvd_binary.append(
-        compute_reconstruction_error(orig, recon, mode="binary")
+reconstruction_output_truncsvd_binary = [
+    compute_reconstruction_error(orig, recon, mode="binary")
+    for orig, recon in zip(
+        images_2d_arr_binary, images_2d_arr_reconstructed_truncsvd_binary, strict=True
     )
+]
 
 # %%
 # non-negative matrix factorisation (NMF) on binary data
@@ -174,7 +176,7 @@ model = NMF(
     n_components=n_latents, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
 )
 X_nmf_binary = model.fit_transform(images_2d_arr_binary)
-# Reconstruct to approximate original space and binarise
+# Reconstruct to original space and binarise
 images_reconstructed_nmf_continuous = np.dot(X_nmf_binary, model.components_)
 images_2d_arr_reconstructed_nmf_binary = (
     images_reconstructed_nmf_continuous > BINARISATION_THRESHOLD_OUTPUTS
@@ -183,13 +185,12 @@ images_2d_arr_reconstructed_nmf_binary = (
 # evaluate reconstruction
 reconstruction_output_nmf_binary = []
 # Loop through each image and its reconstruction
-for _i, (orig, recon) in enumerate(
-    zip(images_2d_arr_binary, images_2d_arr_reconstructed_nmf_binary, strict=True)
-):
-    reconstruction_output_nmf_binary.append(
-        compute_reconstruction_error(orig, recon, mode="binary")
+reconstruction_output_nmf_binary = [
+    compute_reconstruction_error(orig, recon, mode="binary")
+    for orig, recon in zip(
+        images_2d_arr_binary, images_2d_arr_reconstructed_nmf_binary, strict=True
     )
-
+]
 
 # %%
 # store results

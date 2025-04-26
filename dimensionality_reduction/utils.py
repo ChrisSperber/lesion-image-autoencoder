@@ -5,7 +5,10 @@ from typing import Literal
 import nibabel as nib
 import numpy as np
 
-BINARISATION_THRESHOLD = 0.2  # global defining a cutoff to binarise original lesions
+# cutoff to binarise original lesions. WARNING: Only applies to original segmentations to compute
+# the ground truth
+BINARISATION_THRESHOLD_ORIG_LESION = 0.2
+
 RNG_SEED = 9001
 
 
@@ -80,7 +83,8 @@ def compute_reconstruction_error(
 ) -> float:
     """Compute a reconstruction error between two arrays.
 
-    Measure is chosen based on mode either as mean absolute error (continuous) or 1 - Dice (binary).
+    Measure is chosen based on mode either as mean absolute error (continuous) or Dice score
+    (binary).
 
     Args:
         original: The original image (any shape).
@@ -101,7 +105,7 @@ def compute_reconstruction_error(
         return np.mean(np.abs(original - reconstructed))  # mean absolute error
 
     elif mode == "binary":
-        # Ensure binary (exactly 0 or 1)
+        # Ensure binary format of inputs (exactly 0 or 1)
         if not (
             np.isin(original, [0, 1]).all() and np.isin(reconstructed, [0, 1]).all()
         ):
@@ -112,12 +116,11 @@ def compute_reconstruction_error(
         intersection = np.sum(original * reconstructed)
         total = np.sum(original) + np.sum(reconstructed)
 
-        if total == 0:
-            # Both empty masks — define Dice as 1 (i.e., perfect match), so error is 0
-            return 0.0
+        if np.sum(original) == 0:
+            raise ValueError("Original image is an empty zero-array.")
 
         dice_score = 2 * intersection / total
-        return 1.0 - dice_score
+        return dice_score
 
     else:
         raise ValueError(f"Unsupported mode: {mode}. Choose 'continuous' or 'binary'.")

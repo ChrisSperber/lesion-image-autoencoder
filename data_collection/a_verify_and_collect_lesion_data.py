@@ -64,8 +64,8 @@ for path in local_nifti:
         "VoxelSizes": voxel_sizes,
         "VoxelVolumeML": voxel_volume_mm3,
         "Affine": affine.tolist(),
-        "LesionSize_p02": lesion_size_p02,
-        "LesionSsize_p05": lesion_size_p05,
+        "LesionSizeML_p02": lesion_size_p02,
+        "LesionSizeML_p05": lesion_size_p05,
     }
     image_data_list.append(metadata)
 
