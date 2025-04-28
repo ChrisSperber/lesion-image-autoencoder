@@ -9,8 +9,8 @@ Logistic PCA was tested but was found to be unsuited for the large dataset.
 
 Outputs:
     - a csv with the reconstruction loss for each lesion and method.
-    - a npz with the compressed data in a subjects by components 2D format stored in dedicated
-        output folder
+    - an npz with the compressed lesion data in a subjects by components 2D format stored in
+        a dedicated output folder 'output_compressed_images'
 """
 
 # %%
@@ -36,7 +36,7 @@ SUBJECT_ID = "SubjectID"
 OUTPUT_DIR_COMPRESSED_DATA = "output_compressed_images"
 
 # set the total amount of variance the latent variables should explain for PCA with continuous data
-PROPORTION_VARIANCE_EXPLAINED = 0.70
+PROPORTION_VARIANCE_EXPLAINED = 0.75
 # to apply continuous methods on binary data, reconstructed data are binarised at 0.5
 BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
@@ -81,7 +81,7 @@ reconstruction_output_pca = [
 total_explained_variance = np.cumsum(pca.explained_variance_ratio_)
 n_latents = pca.n_components_
 print(
-    f"Number of latent variables is {n_latents} explaining {total_explained_variance[-1]}% of"
+    f"Number of latent variables is {n_latents} explaining {total_explained_variance[-1]}% of "
     "variance in the PCA with continuous data"
 )
 

@@ -3,9 +3,8 @@
 import nibabel as nib
 import numpy as np
 import torch
+from autoencoder_configs import TARGET_SHAPE
 from utils import pad_to_shape
-
-TARGET_SHAPE = (80, 96, 80)
 
 
 class LesionDataset(torch.utils.data.Dataset):
