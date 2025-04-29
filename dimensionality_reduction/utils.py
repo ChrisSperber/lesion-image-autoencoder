@@ -1,15 +1,26 @@
 """Utiliy objects."""
 
+from enum import Enum
 from typing import Literal
 
 import nibabel as nib
 import numpy as np
+import torch
 
 # cutoff to binarise original lesions. WARNING: Only applies to original segmentations to compute
 # the ground truth
 BINARISATION_THRESHOLD_ORIG_LESION = 0.2
 
 RNG_SEED = 9001
+
+
+class AutoencoderType(Enum):
+    """Enum to define naming tags for autoencoders."""
+
+    LINEAR_BINARY_INPUT = ("_linear_binary_input",)
+    LINEAR_CONTINUOUS_INPUT = ("_linear_continuous_input",)
+    DEEP_NONLINEAR_BINARY_INPUT = ("_deep_nonlinear_binary_input",)
+    DEEP_NONLINEAR_CONTINUOUS_INPUT = ("_deep_nonlinear_continuous_input",)
 
 
 def pad_to_shape(img: np.ndarray, target_shape: tuple):
@@ -124,3 +135,30 @@ def compute_reconstruction_error(
 
     else:
         raise ValueError(f"Unsupported mode: {mode}. Choose 'continuous' or 'binary'.")
+
+
+def dice_score_autoencoder(
+    pred: torch.Tensor, target: torch.Tensor, threshold: float = 0.5, eps: float = 1e-7
+):
+    """Dice score computation for autoencoder pipeline.
+
+    Args:
+        pred: Predicted masks, shape (batch_size, C, D, H, W), values in [0, 1].
+        target: Ground truth masks, same shape.
+        threshold: Threshold to binarize the predicted masks.
+        eps: Small value to prevent division by zero.
+
+    Returns:
+        float_: Average Dice score over the batch.
+
+    """
+    pred_bin = (pred > threshold).float()
+    target_bin = (target > threshold).float()
+
+    intersection = (pred_bin * target_bin).sum(
+        dim=[1, 2, 3, 4]
+    )  # Sum across (C, D, H, W)
+    union = pred_bin.sum(dim=[1, 2, 3, 4]) + target_bin.sum(dim=[1, 2, 3, 4])
+
+    dice = (2 * intersection + eps) / (union + eps)
+    return dice.mean().item()

@@ -7,6 +7,9 @@ binarised to 1|0 at BINARISATION_THRESHOLD, with subsequent binarisation of reco
 at p=0.5.
 Logistic PCA was tested but was found to be unsuited for the large dataset.
 
+Requirements:
+    - local data were documented in a_verify_and_collect_lesion_data.csv
+
 Outputs:
     - a csv with the reconstruction loss for each lesion and method.
     - an npz with the compressed lesion data in a subjects by components 2D format stored in

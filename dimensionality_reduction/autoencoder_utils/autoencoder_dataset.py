@@ -1,9 +1,11 @@
 """Dataset class for loading lesions."""
 
+from pathlib import Path
+
 import nibabel as nib
 import numpy as np
 import torch
-from autoencoder_configs import TARGET_SHAPE
+from autoencoder_utils.autoencoder_configs import TARGET_SHAPE
 from utils import pad_to_shape
 
 
@@ -19,7 +21,7 @@ class LesionDataset(torch.utils.data.Dataset):
     - Adds a channel dimension for compatibility with 3D CNNs
 
     Args:
-        nii_paths (list of str): Paths to .nii or .nii.gz files containing lesion masks.
+        nii_paths (list of str/Path): Paths to .nii or .nii.gz files containing lesion masks.
         pad_to (tuple of int): Target shape (D, H, W) to pad each image to. Default is (80, 96, 80).
         threshold (float): Probability threshold below which values are set to 0. Default is 0.2.
         binarize (bool): If True, binarizes the lesion map (values set to 0 or 1). Default is False.
@@ -30,7 +32,11 @@ class LesionDataset(torch.utils.data.Dataset):
     """
 
     def __init__(  # noqa: D107
-        self, nii_paths, pad_to=TARGET_SHAPE, threshold=0.2, binarize=False
+        self,
+        nii_paths: list[str | Path],
+        pad_to: tuple[int, int, int] = TARGET_SHAPE,
+        threshold: float = 0.2,
+        binarize: bool = False,
     ):
         self.nii_paths = nii_paths
         self.pad_to = pad_to
