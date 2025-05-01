@@ -1,7 +1,10 @@
 """Model for simple linear autoencoder."""
 
 import torch
-from autoencoder_configs import N_LATENT_VARIABLES, TARGET_SHAPE_4CHANNEL
+from autoencoder_utils.autoencoder_configs import (
+    N_LATENT_VARIABLES,
+    TARGET_SHAPE_4CHANNEL,
+)
 from torch import nn
 
 
