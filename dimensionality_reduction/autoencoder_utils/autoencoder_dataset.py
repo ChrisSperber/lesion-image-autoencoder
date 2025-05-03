@@ -58,6 +58,6 @@ class LesionDataset(torch.utils.data.Dataset):
         img = pad_to_shape(img, self.pad_to)
 
         # Add channel dimension for PyTorch (C, D, H, W)
-        img = torch.from_numpy(img).unsqueeze(0)
+        img = torch.from_numpy(img).unsqueeze(0).float()
 
         return img

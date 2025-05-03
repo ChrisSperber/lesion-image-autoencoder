@@ -35,9 +35,9 @@ class TrainingConfig:
     lr: float = 0.001
     batch_size_linear: int = 64
     batch_size_deep: int = 4
-    patience_early_stopping: int = 10
+    patience_early_stopping: int = 15
     patience_reduce_lr: int = 3
-    debug_mode: bool = True
+    debug_mode: bool = False
 
 
 autoencoder_config = TrainingConfig()

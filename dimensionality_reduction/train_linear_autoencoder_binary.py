@@ -104,7 +104,7 @@ def train():  # noqa: D103, PLR0915
     best_val_loss = float("inf")
     patience_counter = 0
 
-    checkpoint_path = run_output_dir / f"{timestamp}_best_autoencoder.pt"
+    checkpoint_path = run_output_dir / f"{timestamp}_best_autoencoder_full.pt"
 
     for epoch in range(epochs):
         # ----- TRAIN -----
@@ -191,6 +191,10 @@ def train():  # noqa: D103, PLR0915
     }
     with open(metrics_path, "w") as f:
         json.dump(metrics, f, indent=2)
+
+    # save final weights in lightweight model
+    lightweight_path = run_output_dir / f"{timestamp}_best_autoencoder_weights.pt"
+    torch.save(model.state_dict(), lightweight_path)
 
 
 if __name__ == "__main__":
