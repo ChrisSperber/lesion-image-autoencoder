@@ -1,20 +1,19 @@
 """Train linear autoencoder."""
 
 # %%
+import json
 import os
+from dataclasses import asdict
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
-    BATCH_SIZE,
     CHECKPOINT_DIR,
-    DEVICE,
-    EPOCHS,
-    LEARNING_RATE,
     N_LATENT_VARIABLES,
-    PATIENCE_EARLY_STOPPING,
     TARGET_SHAPE_4CHANNEL,
+    config,
 )
 from autoencoder_utils.autoencoder_dataset import LesionDataset
 from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
@@ -36,11 +35,38 @@ data_df = pd.read_csv(
 nifti_path_list = data_df[LESION_PATH_COLUMN].tolist()
 
 # %%
+# assign training variables
+timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+epochs = config.epochs
+
+if AUTOENCODER_TYPE in (
+    AutoencoderType.LINEAR_BINARY_INPUT,
+    AutoencoderType.LINEAR_CONTINUOUS_INPUT,
+):
+    batch_size = config.batch_size_linear
+elif AUTOENCODER_TYPE in (
+    AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT,
+    AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT,
+):
+    batch_size = config.batch_size_deep
+else:
+    raise ValueError(f"Invalid autoencoder type {AUTOENCODER_TYPE}")
+
+if config.debug_mode:
+    print("DEBUG MODE ENABLED: Overriding training settings.")
+    epochs = 2
+    batch_size = 2
+    nifti_path_list = nifti_path_list[: min(100, len(nifti_path_list))]
+
+with open(f"run_config_{timestamp}.json", "w") as f:
+    json.dump(asdict(config), f, indent=2)
+
+# %%
 
 
 def train():  # noqa: D103
     device = torch.device(
-        "cuda" if torch.cuda.is_available() and DEVICE == "cuda" else "cpu"
+        "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
     )
     print(f"Using device: {device}")
 
@@ -51,9 +77,9 @@ def train():  # noqa: D103
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
 
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     # use same batch size for validation
-    val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
     model = LinearAutoencoder(
         input_shape=TARGET_SHAPE_4CHANNEL, latent_dim=N_LATENT_VARIABLES
@@ -61,18 +87,18 @@ def train():  # noqa: D103
 
     # Loss and optimizer
     criterion = nn.BCELoss()
-    optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    optimizer = optim.Adam(model.parameters(), lr=config.lr)
 
     # Early stopping and checkpoint setup
     best_val_loss = float("inf")
     patience_counter = 0
 
     os.makedirs(CHECKPOINT_DIR, exist_ok=True)
-    checkpoint_path = os.path.join(
-        CHECKPOINT_DIR, f"best_autoencoder_{AUTOENCODER_TYPE.value}.pt"
+    checkpoint_path = (
+        CHECKPOINT_DIR / f"{timestamp}_best_autoencoder_{AUTOENCODER_TYPE.value}.pt"
     )
 
-    for epoch in range(EPOCHS):
+    for epoch in range(epochs):
         # ----- TRAIN -----
         model.train()
         train_loss = 0.0
@@ -110,10 +136,10 @@ def train():  # noqa: D103
         current_lr = optimizer.param_groups[0]["lr"]
 
         print(
-            f"Epoch [{epoch+1}/{EPOCHS}] "
+            f"Epoch [{epoch+1}/{epochs}] "
             f"Train Loss: {train_loss:.4f} "
             f"Val Loss: {val_loss:.4f} "
-            f"Val Dice: {dice_avg:.4f}"
+            f"Val Dice: {dice_avg:.4f} "
             f"LR: {current_lr:.6f}"
         )
 
@@ -134,10 +160,10 @@ def train():  # noqa: D103
         else:
             patience_counter += 1
             print(
-                f"No improvement. Patience {patience_counter}/{PATIENCE_EARLY_STOPPING}"
+                f"No improvement. Patience {patience_counter}/{config.patience_early_stopping}"
             )
 
-            if patience_counter >= PATIENCE_EARLY_STOPPING:
+            if patience_counter >= config.patience_early_stopping:
                 print("Early stopping triggered!")
                 break
 
