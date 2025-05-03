@@ -2,7 +2,6 @@
 
 # %%
 import json
-import os
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
@@ -10,16 +9,17 @@ from pathlib import Path
 import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
-    CHECKPOINT_DIR,
+    AUTOENCODER_OUTPUTS_DIR,
     N_LATENT_VARIABLES,
     TARGET_SHAPE_4CHANNEL,
-    config,
+    autoencoder_config,
 )
 from autoencoder_utils.autoencoder_dataset import LesionDataset
 from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
 from torch import nn, optim
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
-from utils import AutoencoderType, dice_score_autoencoder
+from utils import AutoencoderType, dice_score_autoencoder, get_batch_size_for_type
 
 AUTOENCODER_TYPE = AutoencoderType.LINEAR_BINARY_INPUT
 
@@ -37,36 +37,39 @@ nifti_path_list = data_df[LESION_PATH_COLUMN].tolist()
 # %%
 # assign training variables
 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-epochs = config.epochs
+run_output_dir = (
+    AUTOENCODER_OUTPUTS_DIR / f"output_{timestamp}_{AUTOENCODER_TYPE.value}"
+)
+epochs = autoencoder_config.epochs
 
-if AUTOENCODER_TYPE in (
-    AutoencoderType.LINEAR_BINARY_INPUT,
-    AutoencoderType.LINEAR_CONTINUOUS_INPUT,
-):
-    batch_size = config.batch_size_linear
-elif AUTOENCODER_TYPE in (
-    AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT,
-    AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT,
-):
-    batch_size = config.batch_size_deep
-else:
-    raise ValueError(f"Invalid autoencoder type {AUTOENCODER_TYPE}")
+batch_size = get_batch_size_for_type(
+    autoencoder_type=AUTOENCODER_TYPE,
+    batch_size_linear=autoencoder_config.batch_size_linear,
+    batch_size_deep=autoencoder_config.batch_size_deep,
+)
 
-if config.debug_mode:
+if autoencoder_config.debug_mode:
     print("DEBUG MODE ENABLED: Overriding training settings.")
     epochs = 2
     batch_size = 2
     nifti_path_list = nifti_path_list[: min(100, len(nifti_path_list))]
 
-with open(f"run_config_{timestamp}.json", "w") as f:
-    json.dump(asdict(config), f, indent=2)
+config_path = run_output_dir / "run_config.json"
+with open(config_path, "w") as f:
+    json.dump(asdict(autoencoder_config), f, indent=2)
+
+val_dice_scores = []
+val_train_loss = []
+val_eval_loss = []
 
 # %%
 
 
-def train():  # noqa: D103
+def train():  # noqa: D103, PLR0915
     device = torch.device(
-        "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
+        "cuda"
+        if torch.cuda.is_available() and autoencoder_config.device == "cuda"
+        else "cpu"
     )
     print(f"Using device: {device}")
 
@@ -85,18 +88,23 @@ def train():  # noqa: D103
         input_shape=TARGET_SHAPE_4CHANNEL, latent_dim=N_LATENT_VARIABLES
     ).to(device)
 
-    # Loss and optimizer
+    # Loss, optimizer, and LR on plateau initialisation
     criterion = nn.BCELoss()
-    optimizer = optim.Adam(model.parameters(), lr=config.lr)
+    optimizer = optim.Adam(model.parameters(), lr=autoencoder_config.lr)
 
+    scheduler = ReduceLROnPlateau(
+        optimizer,
+        mode="min",
+        factor=0.5,  # halve the learning rate
+        patience=autoencoder_config.patience_reduce_lr,
+        verbose=True,
+    )
     # Early stopping and checkpoint setup
     best_val_loss = float("inf")
     patience_counter = 0
 
-    os.makedirs(CHECKPOINT_DIR, exist_ok=True)
-    checkpoint_path = (
-        CHECKPOINT_DIR / f"{timestamp}_best_autoencoder_{AUTOENCODER_TYPE.value}.pt"
-    )
+    AUTOENCODER_OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+    checkpoint_path = run_output_dir / f"{timestamp}_best_autoencoder.pt"
 
     for epoch in range(epochs):
         # ----- TRAIN -----
@@ -134,6 +142,9 @@ def train():  # noqa: D103
 
         # Logging
         current_lr = optimizer.param_groups[0]["lr"]
+        val_dice_scores.append(dice_avg)
+        val_train_loss.append(train_loss)
+        val_eval_loss.append(val_loss)
 
         print(
             f"Epoch [{epoch+1}/{epochs}] "
@@ -142,6 +153,9 @@ def train():  # noqa: D103
             f"Val Dice: {dice_avg:.4f} "
             f"LR: {current_lr:.6f}"
         )
+
+        # adapt LR on plateau via scheduler
+        scheduler.step(val_loss)
 
         # Early stopping and checkpointing
         if val_loss < best_val_loss:
@@ -160,14 +174,23 @@ def train():  # noqa: D103
         else:
             patience_counter += 1
             print(
-                f"No improvement. Patience {patience_counter}/{config.patience_early_stopping}"
+                "No improvement. Patience "
+                f"{patience_counter}/{autoencoder_config.patience_early_stopping}"
             )
 
-            if patience_counter >= config.patience_early_stopping:
+            if patience_counter >= autoencoder_config.patience_early_stopping:
                 print("Early stopping triggered!")
                 break
 
     print(f"Training finished. Best validation loss: {best_val_loss:.4f}")
+    metrics_path = run_output_dir / "metrics.json"
+    metrics = {
+        "train_loss": val_train_loss,
+        "val_loss": val_eval_loss,
+        "val_dice": val_dice_scores,
+    }
+    with open(metrics_path, "w") as f:
+        json.dump(metrics, f, indent=2)
 
 
 if __name__ == "__main__":

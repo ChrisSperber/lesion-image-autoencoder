@@ -11,7 +11,7 @@ TARGET_SHAPE_4CHANNEL: tuple[int, int, int, int] = (1,) + TARGET_SHAPE
 # a_simple_feature_reduction.py
 N_LATENT_VARIABLES: int = 75
 
-CHECKPOINT_DIR: Path = Path(__file__).parent / "checkpoints"
+AUTOENCODER_OUTPUTS_DIR: Path = Path(__file__).parent / "outputs"
 
 
 @dataclass
@@ -40,4 +40,4 @@ class TrainingConfig:
     debug_mode: bool = False
 
 
-config = TrainingConfig()
+autoencoder_config = TrainingConfig()

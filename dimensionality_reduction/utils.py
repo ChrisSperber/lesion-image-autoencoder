@@ -162,3 +162,34 @@ def dice_score_autoencoder(
 
     dice = (2 * intersection + eps) / (union + eps)
     return dice.mean().item()
+
+
+def get_batch_size_for_type(
+    autoencoder_type: AutoencoderType, batch_size_linear: int, batch_size_deep: int
+) -> int:
+    """Define batch size according to Autoencoder type (linear/deep non-linear).
+
+    Args:
+        autoencoder_type (AutoencoderType): Autoencoder type defined by Enum.
+        batch_size_linear (int): Batch size if linear autoencoder.
+        batch_size_deep (int): Batch size if deep nonlinear autoencoder.
+
+    Raises:
+        ValueError: Unknown Autoencoder type.
+
+    Returns:
+        int: Batch size
+
+    """
+    if autoencoder_type in (
+        AutoencoderType.LINEAR_BINARY_INPUT,
+        AutoencoderType.LINEAR_CONTINUOUS_INPUT,
+    ):
+        return batch_size_linear
+    elif autoencoder_type in (
+        AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT,
+        AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT,
+    ):
+        return batch_size_deep
+    else:
+        raise ValueError(f"Invalid autoencoder type {autoencoder_type}")
