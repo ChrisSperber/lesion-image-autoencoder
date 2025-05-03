@@ -37,7 +37,7 @@ class TrainingConfig:
     batch_size_deep: int = 4
     patience_early_stopping: int = 10
     patience_reduce_lr: int = 3
-    debug_mode: bool = False
+    debug_mode: bool = True
 
 
 autoencoder_config = TrainingConfig()

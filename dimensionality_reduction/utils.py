@@ -17,10 +17,10 @@ RNG_SEED = 9001
 class AutoencoderType(Enum):
     """Enum to define naming tags for autoencoders."""
 
-    LINEAR_BINARY_INPUT = ("_linear_binary_input",)
-    LINEAR_CONTINUOUS_INPUT = ("_linear_continuous_input",)
-    DEEP_NONLINEAR_BINARY_INPUT = ("_deep_nonlinear_binary_input",)
-    DEEP_NONLINEAR_CONTINUOUS_INPUT = ("_deep_nonlinear_continuous_input",)
+    LINEAR_BINARY_INPUT = "linear_binary_input"
+    LINEAR_CONTINUOUS_INPUT = "linear_continuous_input"
+    DEEP_NONLINEAR_BINARY_INPUT = "deep_nonlinear_binary_input"
+    DEEP_NONLINEAR_CONTINUOUS_INPUT = "deep_nonlinear_continuous_input"
 
 
 def pad_to_shape(img: np.ndarray, target_shape: tuple):

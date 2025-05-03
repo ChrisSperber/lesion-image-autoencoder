@@ -35,11 +35,13 @@ data_df = pd.read_csv(
 nifti_path_list = data_df[LESION_PATH_COLUMN].tolist()
 
 # %%
-# assign training variables
+# assign training variables and create directories
 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+AUTOENCODER_OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
 run_output_dir = (
-    AUTOENCODER_OUTPUTS_DIR / f"output_{timestamp}_{AUTOENCODER_TYPE.value}"
+    AUTOENCODER_OUTPUTS_DIR / f"output_{AUTOENCODER_TYPE.value}_{timestamp}"
 )
+run_output_dir.mkdir(parents=True, exist_ok=True)
 epochs = autoencoder_config.epochs
 
 batch_size = get_batch_size_for_type(
@@ -97,13 +99,11 @@ def train():  # noqa: D103, PLR0915
         mode="min",
         factor=0.5,  # halve the learning rate
         patience=autoencoder_config.patience_reduce_lr,
-        verbose=True,
     )
     # Early stopping and checkpoint setup
     best_val_loss = float("inf")
     patience_counter = 0
 
-    AUTOENCODER_OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
     checkpoint_path = run_output_dir / f"{timestamp}_best_autoencoder.pt"
 
     for epoch in range(epochs):
