@@ -1,4 +1,7 @@
-"""Train linear autoencoder."""
+"""Train linear autoencoder for binary images.
+
+Binary data are evaluated via BCELoss.
+"""
 
 # %%
 import json
@@ -91,8 +94,11 @@ def train():  # noqa: D103, PLR0915
     ).to(device)
 
     # Loss, optimizer, and LR on plateau initialisation
+    # weight_decay adds L2 regularisation to better handle the large-dimensional model
     criterion = nn.BCELoss()
-    optimizer = optim.Adam(model.parameters(), lr=autoencoder_config.lr)
+    optimizer = optim.Adam(
+        model.parameters(), lr=autoencoder_config.lr, weight_decay=1e-4
+    )
 
     scheduler = ReduceLROnPlateau(
         optimizer,
@@ -199,3 +205,5 @@ def train():  # noqa: D103, PLR0915
 
 if __name__ == "__main__":
     train()
+
+# %%

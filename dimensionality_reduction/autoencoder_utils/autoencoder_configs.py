@@ -6,10 +6,7 @@ from pathlib import Path
 TARGET_SHAPE: tuple[int, int, int] = (80, 96, 80)
 TARGET_SHAPE_4CHANNEL: tuple[int, int, int, int] = (1,) + TARGET_SHAPE
 
-# the number of latent variables is defined by the number of variables required to explain 75% of
-# variance with PCA in the continuous data. This value is printed as an output of
-# a_simple_feature_reduction.py
-N_LATENT_VARIABLES: int = 75
+N_LATENT_VARIABLES: int = 64
 
 AUTOENCODER_OUTPUTS_DIR: Path = Path(__file__).parent / "outputs"
 
@@ -35,7 +32,7 @@ class TrainingConfig:
     lr: float = 0.001
     batch_size_linear: int = 64
     batch_size_deep: int = 4
-    patience_early_stopping: int = 15
+    patience_early_stopping: int = 10
     patience_reduce_lr: int = 3
     debug_mode: bool = False
 

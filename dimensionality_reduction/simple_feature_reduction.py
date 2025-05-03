@@ -38,8 +38,8 @@ SUBJECT_ID = "SubjectID"
 # folder to store the compressed data
 OUTPUT_DIR_COMPRESSED_DATA = "output_compressed_images"
 
-# set the total amount of variance the latent variables should explain for PCA with continuous data
-PROPORTION_VARIANCE_EXPLAINED = 0.75
+# set the number of latent variables to 64 for optimal computation time with autoencoder
+N_LATENTS = 64
 # to apply continuous methods on binary data, reconstructed data are binarised at 0.5
 BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
@@ -65,7 +65,7 @@ output_base_path.mkdir(exist_ok=True)
 
 # %%
 # standard PCA on continuous data
-pca = PCA(n_components=PROPORTION_VARIANCE_EXPLAINED)
+pca = PCA(n_components=N_LATENTS)
 images_pca = pca.fit_transform(images_2d_arr)
 
 # Reconstruct components back to original space
@@ -82,15 +82,14 @@ reconstruction_output_pca = [
 
 # %%
 total_explained_variance = np.cumsum(pca.explained_variance_ratio_)
-n_latents = pca.n_components_
 print(
-    f"Number of latent variables is {n_latents} explaining {total_explained_variance[-1]}% of "
+    f"Number of latent variables is {N_LATENTS} explaining {total_explained_variance[-1]}% of "
     "variance in the PCA with continuous data"
 )
 
 # %%
 # Truncated singular value decomposition on continuous data
-svd = TruncatedSVD(n_components=n_latents)  # use the same number of components here
+svd = TruncatedSVD(n_components=N_LATENTS)  # use the same number of components here
 images_svd = svd.fit_transform(images_2d_arr)
 
 # Reconstruct the original-like array
@@ -110,7 +109,7 @@ reconstruction_output_truncsvd = [
 # non-negative matrix factorisation (NMF) on continuous data
 print("Warning, NMF computation may take several minutes up to hours!")
 model = NMF(
-    n_components=n_latents, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
+    n_components=N_LATENTS, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
 )
 X_nmf = model.fit_transform(images_2d_arr)
 
@@ -136,7 +135,7 @@ reconstruction_output_nmf = [
 
 # %%
 # standard PCA on binary data
-pca = PCA(n_components=n_latents)
+pca = PCA(n_components=N_LATENTS)
 images_pca_binary = pca.fit_transform(images_2d_arr_binary)
 # Reconstruct components back to original space and binarise
 images_2d_arr_reconstructed_pca_binary = (
@@ -155,7 +154,7 @@ reconstruction_output_pca_binary = [
 
 # %%
 # Truncated singular value decomposition on binary data
-svd = TruncatedSVD(n_components=n_latents)  # use the same number of components here
+svd = TruncatedSVD(n_components=N_LATENTS)  # use the same number of components here
 images_svd_binary = svd.fit_transform(images_2d_arr_binary)
 
 # Reconstruct the original-like array
@@ -176,7 +175,7 @@ reconstruction_output_truncsvd_binary = [
 # %%
 # non-negative matrix factorisation (NMF) on binary data
 model = NMF(
-    n_components=n_latents, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
+    n_components=N_LATENTS, random_state=RNG_SEED, max_iter=MAXIMUM_ITERATIONS_NMF
 )
 X_nmf_binary = model.fit_transform(images_2d_arr_binary)
 # Reconstruct to original space and binarise
