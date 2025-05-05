@@ -31,7 +31,7 @@ class TrainingConfig:
     epochs: int = 500
     lr: float = 0.001
     batch_size_linear: int = 64
-    batch_size_deep: int = 4
+    batch_size_deep: int = 1
     patience_early_stopping: int = 10
     patience_reduce_lr: int = 3
     debug_mode: bool = False
