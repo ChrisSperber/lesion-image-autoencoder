@@ -13,6 +13,7 @@ import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
     AUTOENCODER_OUTPUTS_DIR,
+    LESION_WEIGHT_MULTIPLIER,
     N_LATENT_VARIABLES,
     TARGET_SHAPE_4CHANNEL,
     autoencoder_config,
@@ -122,6 +123,8 @@ def train():  # noqa: D103, PLR0915
             optimizer.zero_grad()
             outputs = model(batch_gpu)
             loss = criterion(outputs, batch_gpu)
+            weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
+            loss = (loss * weights).mean()
             loss.backward()
             optimizer.step()
 
@@ -137,6 +140,8 @@ def train():  # noqa: D103, PLR0915
                 batch_gpu = batch.to(device)
                 outputs = model(batch_gpu)
                 loss = criterion(outputs, batch_gpu)
+                weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
+                loss = (loss * weights).mean()
                 val_loss += loss.item() * batch_gpu.size(0)
 
         val_loss /= len(val_loader.dataset)
