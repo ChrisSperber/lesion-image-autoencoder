@@ -1,6 +1,6 @@
-"""Train linear autoencoder for binary images.
+"""Train deep nonlinear autoencoder for continuous images.
 
-Binary data are evaluated via BCELoss.
+Continuous data are evaluated via L1Loss (i.e. MAE).
 """
 
 # %%
@@ -18,13 +18,13 @@ from autoencoder_utils.autoencoder_configs import (
     autoencoder_config,
 )
 from autoencoder_utils.autoencoder_dataset import LesionDataset
-from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
+from autoencoder_utils.models.autoencoder_deep_nonlinear import Conv3dAutoencoder
 from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
-from utils import AutoencoderType, dice_score_autoencoder, get_batch_size_for_type
+from utils import AutoencoderType, get_batch_size_for_type
 
-AUTOENCODER_TYPE = AutoencoderType.LINEAR_BINARY_INPUT
+AUTOENCODER_TYPE = AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT
 
 DATA_COLLECTION_DIR = "data_collection"
 DATA_CSV = "a_verify_and_collect_lesion_data.csv"
@@ -67,8 +67,9 @@ val_dice_scores = []
 val_train_loss = []
 val_eval_loss = []
 
-
 # %%
+
+
 def train():  # noqa: D103, PLR0915
     device = torch.device(
         "cuda"
@@ -77,7 +78,7 @@ def train():  # noqa: D103, PLR0915
     )
     print(f"Using device: {device}")
 
-    dataset = LesionDataset(nii_paths=nifti_path_list, binarize=True)
+    dataset = LesionDataset(nii_paths=nifti_path_list, binarize=False)
 
     # Train/validation split
     train_size = int(0.8 * len(dataset))
@@ -88,13 +89,13 @@ def train():  # noqa: D103, PLR0915
     # use same batch size for validation
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
-    model = LinearAutoencoder(
+    model = Conv3dAutoencoder(
         input_shape=TARGET_SHAPE_4CHANNEL, latent_dim=N_LATENT_VARIABLES
     ).to(device)
 
     # Loss, optimizer, and LR on plateau initialisation
     # weight_decay adds L2 regularisation to better handle the large-dimensional model
-    criterion = nn.BCELoss()
+    criterion = nn.L1Loss()
     optimizer = optim.Adam(
         model.parameters(), lr=autoencoder_config.lr, weight_decay=1e-4
     )
@@ -131,7 +132,6 @@ def train():  # noqa: D103, PLR0915
         # ----- VALIDATE -----
         model.eval()
         val_loss = 0.0
-        dice_total = 0.0
         with torch.no_grad():
             for batch in val_loader:
                 batch_gpu = batch.to(device)
@@ -139,15 +139,10 @@ def train():  # noqa: D103, PLR0915
                 loss = criterion(outputs, batch_gpu)
                 val_loss += loss.item() * batch_gpu.size(0)
 
-                # Optional: Calculate Dice score
-                dice_total += dice_score_autoencoder(outputs, batch_gpu)
-
         val_loss /= len(val_loader.dataset)
-        dice_avg = dice_total / len(val_loader)
 
         # Logging
         current_lr = optimizer.param_groups[0]["lr"]
-        val_dice_scores.append(dice_avg)
         val_train_loss.append(train_loss)
         val_eval_loss.append(val_loss)
 
@@ -155,7 +150,6 @@ def train():  # noqa: D103, PLR0915
             f"Epoch [{epoch+1}/{epochs}] "
             f"Train Loss: {train_loss:.4f} "
             f"Val Loss: {val_loss:.4f} "
-            f"Val Dice: {dice_avg:.4f} "
             f"LR: {current_lr:.6f}"
         )
 
@@ -192,7 +186,6 @@ def train():  # noqa: D103, PLR0915
     metrics = {
         "train_loss": val_train_loss,
         "val_loss": val_eval_loss,
-        "val_dice": val_dice_scores,
     }
     with open(metrics_path, "w") as f:
         json.dump(metrics, f, indent=2)
