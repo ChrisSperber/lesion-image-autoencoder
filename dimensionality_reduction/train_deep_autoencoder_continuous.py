@@ -19,11 +19,11 @@ from autoencoder_utils.autoencoder_configs import (
     autoencoder_config,
 )
 from autoencoder_utils.autoencoder_dataset import LesionDataset
+from autoencoder_utils.autoencoder_utils import AutoencoderType, get_batch_size_for_type
 from autoencoder_utils.models.autoencoder_deep_nonlinear import Conv3dAutoencoder
 from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
-from utils import AutoencoderType, get_batch_size_for_type
 
 AUTOENCODER_TYPE = AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT
 

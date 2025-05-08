@@ -1,26 +1,15 @@
 """Utiliy objects."""
 
-from enum import Enum
 from typing import Literal
 
 import nibabel as nib
 import numpy as np
-import torch
 
 # cutoff to binarise original lesions. WARNING: Only applies to original segmentations to compute
 # the ground truth
 BINARISATION_THRESHOLD_ORIG_LESION = 0.2
 
 RNG_SEED = 9001
-
-
-class AutoencoderType(Enum):
-    """Enum to define naming tags for autoencoders."""
-
-    LINEAR_BINARY_INPUT = "linear_binary_input"
-    LINEAR_CONTINUOUS_INPUT = "linear_continuous_input"
-    DEEP_NONLINEAR_BINARY_INPUT = "deep_nonlinear_binary_input"
-    DEEP_NONLINEAR_CONTINUOUS_INPUT = "deep_nonlinear_continuous_input"
 
 
 def pad_to_shape(img: np.ndarray, target_shape: tuple):
@@ -135,61 +124,3 @@ def compute_reconstruction_error(
 
     else:
         raise ValueError(f"Unsupported mode: {mode}. Choose 'continuous' or 'binary'.")
-
-
-def dice_score_autoencoder(
-    pred: torch.Tensor, target: torch.Tensor, threshold: float = 0.5, eps: float = 1e-7
-):
-    """Dice score computation for autoencoder pipeline.
-
-    Args:
-        pred: Predicted masks, shape (batch_size, C, D, H, W), values in [0, 1].
-        target: Ground truth masks, same shape.
-        threshold: Threshold to binarize the predicted masks.
-        eps: Small value to prevent division by zero.
-
-    Returns:
-        float_: Average Dice score over the batch.
-
-    """
-    pred_bin = (pred > threshold).float()
-    target_bin = (target > threshold).float()
-
-    intersection = (pred_bin * target_bin).sum(
-        dim=[1, 2, 3, 4]
-    )  # Sum across (C, D, H, W)
-    union = pred_bin.sum(dim=[1, 2, 3, 4]) + target_bin.sum(dim=[1, 2, 3, 4])
-
-    dice = (2 * intersection + eps) / (union + eps)
-    return dice.mean().item()
-
-
-def get_batch_size_for_type(
-    autoencoder_type: AutoencoderType, batch_size_linear: int, batch_size_deep: int
-) -> int:
-    """Define batch size according to Autoencoder type (linear/deep non-linear).
-
-    Args:
-        autoencoder_type (AutoencoderType): Autoencoder type defined by Enum.
-        batch_size_linear (int): Batch size if linear autoencoder.
-        batch_size_deep (int): Batch size if deep nonlinear autoencoder.
-
-    Raises:
-        ValueError: Unknown Autoencoder type.
-
-    Returns:
-        int: Batch size
-
-    """
-    if autoencoder_type in (
-        AutoencoderType.LINEAR_BINARY_INPUT,
-        AutoencoderType.LINEAR_CONTINUOUS_INPUT,
-    ):
-        return batch_size_linear
-    elif autoencoder_type in (
-        AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT,
-        AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT,
-    ):
-        return batch_size_deep
-    else:
-        raise ValueError(f"Invalid autoencoder type {autoencoder_type}")
