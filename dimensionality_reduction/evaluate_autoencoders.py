@@ -91,6 +91,9 @@ for autoencoder_type in AutoencoderType:
             reconstructed_tensor.cpu().squeeze().numpy(),
             original_shape=original_img_shape,
         )
+        if mode == "binary":
+            reconstructed_img = reconstructed_img > BINARISATION_THRESHOLD_OUTPUTS
+
         recon_error = compute_reconstruction_error(
             original=original_img,
             reconstructed=reconstructed_img,

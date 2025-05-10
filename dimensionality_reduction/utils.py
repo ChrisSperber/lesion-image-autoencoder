@@ -97,7 +97,7 @@ def load_image_as_5d_tensor(
         torch.Tensor: (1, 1, D, H, W)-tensor
 
     """
-    nifti: nib.nifti1.Nifti1Image = nib.load(Path)
+    nifti: nib.nifti1.Nifti1Image = nib.load(lesion_path)
     if mode == "binary":
         img_arr = (
             nifti.get_fdata(dtype=np.float32) > BINARISATION_THRESHOLD_ORIG_LESION

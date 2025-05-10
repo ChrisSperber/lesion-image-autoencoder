@@ -1,10 +1,8 @@
 """Model for deep, non-linear autoencoder."""
 
-from autoencoder_utils.autoencoder_configs import (
-    N_LATENT_VARIABLES,
-    TARGET_SHAPE_4CHANNEL,
-)
+from autoencoder_utils.autoencoder_configs import TARGET_SHAPE_4CHANNEL
 from torch import nn
+from utils import N_LATENT_VARIABLES
 
 
 class Conv3dAutoencoder(nn.Module):

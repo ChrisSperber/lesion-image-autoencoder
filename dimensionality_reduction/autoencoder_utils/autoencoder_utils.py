@@ -11,7 +11,7 @@ from autoencoder_utils.models.autoencoder_deep_nonlinear import Conv3dAutoencode
 from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
 from utils import N_LATENT_VARIABLES
 
-AUTOENCODER_OUTPUT_DIR = Path(__file__).parent / "autoencoder_utils" / "outputs"
+AUTOENCODER_OUTPUT_DIR = Path(__file__).parent / "outputs"
 
 
 class AutoencoderType(Enum):
@@ -97,8 +97,9 @@ def find_model_weights_path_for_autoencoder_type(
         Path: Path to the weights file of Autoencoder type.
 
     """
-    pt_files = list(AUTOENCODER_OUTPUT_DIR.glob("*best_autoencoder_weights.pt"))
-    relevant_weights = [f for f in pt_files if autoencoder_type.value in str(f)]
+    pt_files = list(AUTOENCODER_OUTPUT_DIR.rglob("*autoencoder_weights.pt"))
+    filestr = f"output_{autoencoder_type.value}"
+    relevant_weights = [f for f in pt_files if filestr in str(f)]
 
     if len(relevant_weights) == 0:
         raise FileNotFoundError(f"No weights file for {autoencoder_type.value} found.")
