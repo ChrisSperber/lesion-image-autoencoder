@@ -5,11 +5,11 @@ from pathlib import Path
 
 import torch
 from autoencoder_utils.autoencoder_configs import (
-    N_LATENT_VARIABLES,
     TARGET_SHAPE_4CHANNEL,
 )
 from autoencoder_utils.models.autoencoder_deep_nonlinear import Conv3dAutoencoder
 from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
+from utils import N_LATENT_VARIABLES
 
 AUTOENCODER_OUTPUT_DIR = Path(__file__).parent / "autoencoder_utils" / "outputs"
 
@@ -109,9 +109,22 @@ def find_model_weights_path_for_autoencoder_type(
     return relevant_weights[0]
 
 
-def load_model_for_type(
+def load_autoencoder_model_for_type(
     autoencoder_type: AutoencoderType, device: torch.device
 ) -> torch.nn.Module:
+    """Load weighting model for a given Autoencoder type.
+
+    Args:
+        autoencoder_type (AutoencoderType): Autoencoder type
+        device (torch.device): cpu/cuda
+
+    Raises:
+        ValueError: Unknown autoencoder type
+
+    Returns:
+        torch.nn.Module: Model weightings.
+
+    """
     weights_path = find_model_weights_path_for_autoencoder_type(autoencoder_type)
 
     if autoencoder_type in (
@@ -122,9 +135,9 @@ def load_model_for_type(
             input_shape=TARGET_SHAPE_4CHANNEL,
             latent_dim=N_LATENT_VARIABLES,
         )
-    elif (
-        autoencoder_type == AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT
-        or autoencoder_type == AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT
+    elif autoencoder_type in (
+        AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT,
+        AutoencoderType.DEEP_NONLINEAR_CONTINUOUS_INPUT,
     ):
         model = Conv3dAutoencoder(
             input_shape=TARGET_SHAPE_4CHANNEL,

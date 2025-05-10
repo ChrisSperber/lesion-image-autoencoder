@@ -6,8 +6,6 @@ from pathlib import Path
 TARGET_SHAPE: tuple[int, int, int] = (80, 96, 80)
 TARGET_SHAPE_4CHANNEL: tuple[int, int, int, int] = (1,) + TARGET_SHAPE
 
-N_LATENT_VARIABLES: int = 64
-
 AUTOENCODER_OUTPUTS_DIR: Path = Path(__file__).parent / "outputs"
 
 # high sparsity of data caused model collapse with deep autoencoders on continuous data. A loss

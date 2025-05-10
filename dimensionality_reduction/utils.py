@@ -1,15 +1,21 @@
 """Utiliy objects."""
 
+from pathlib import Path
 from typing import Literal
 
 import nibabel as nib
 import numpy as np
+import torch
+from autoencoder_utils.autoencoder_configs import TARGET_SHAPE
 
 # cutoff to binarise original lesions. WARNING: Only applies to original segmentations to compute
 # the ground truth
 BINARISATION_THRESHOLD_ORIG_LESION = 0.2
 
 RNG_SEED = 9001
+
+# set the number of latent variables to 64 for optimal computation time with autoencoder
+N_LATENT_VARIABLES: int = 64
 
 
 def pad_to_shape(img: np.ndarray, target_shape: tuple):
@@ -74,6 +80,35 @@ def load_vectorised_images(lesion_path_list: list[str]) -> np.ndarray:
         data = img.get_fdata(dtype=np.float32)
         images.append(data.ravel())
     return np.stack(images)
+
+
+def load_image_as_5d_tensor(
+    lesion_path: Path, mode: Literal["continuous", "binary"]
+) -> torch.Tensor:
+    """Load a local lesion nifti as a 5d tensor.
+
+    The tensor includes singleton batch and 4th channel dimensions and has size (1, 1, D, H, W).
+
+    Args:
+        lesion_path (Path): Path to a local lesion nifti.
+        mode (Literal): Format of tensor (binarised or continuous)
+
+    Returns:
+        torch.Tensor: (1, 1, D, H, W)-tensor
+
+    """
+    nifti: nib.nifti1.Nifti1Image = nib.load(Path)
+    if mode == "binary":
+        img_arr = (
+            nifti.get_fdata(dtype=np.float32) > BINARISATION_THRESHOLD_ORIG_LESION
+        ).astype(np.float32)
+    elif mode == "continuous":
+        img_arr = nifti.get_fdata(dtype=np.float32)
+    else:
+        raise ValueError("Invalid mode {mode}")
+
+    img_padded = pad_to_shape(img_arr, target_shape=TARGET_SHAPE)
+    return torch.from_numpy(img_padded).unsqueeze(0).unsqueeze(0)
 
 
 def compute_reconstruction_error(

@@ -13,7 +13,6 @@ import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
     AUTOENCODER_OUTPUTS_DIR,
-    N_LATENT_VARIABLES,
     TARGET_SHAPE_4CHANNEL,
     autoencoder_config,
 )
@@ -27,6 +26,7 @@ from autoencoder_utils.models.autoencoder_deep_nonlinear import Conv3dAutoencode
 from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
+from utils import N_LATENT_VARIABLES
 
 AUTOENCODER_TYPE = AutoencoderType.DEEP_NONLINEAR_BINARY_INPUT
 

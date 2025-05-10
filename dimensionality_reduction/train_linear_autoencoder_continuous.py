@@ -14,7 +14,6 @@ import torch
 from autoencoder_utils.autoencoder_configs import (
     AUTOENCODER_OUTPUTS_DIR,
     LESION_WEIGHT_MULTIPLIER,
-    N_LATENT_VARIABLES,
     TARGET_SHAPE_4CHANNEL,
     autoencoder_config,
 )
@@ -24,6 +23,7 @@ from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
 from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
+from utils import N_LATENT_VARIABLES
 
 AUTOENCODER_TYPE = AutoencoderType.LINEAR_CONTINUOUS_INPUT
 
