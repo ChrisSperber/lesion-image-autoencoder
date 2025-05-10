@@ -98,6 +98,8 @@ for autoencoder_type in AutoencoderType:
         )
         reconstruction_errors.append(recon_error)
 
+    results_df[autoencoder_type.value] = reconstruction_errors
+
 # %%
 # store results
 
