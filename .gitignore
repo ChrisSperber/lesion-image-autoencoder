@@ -1,6 +1,7 @@
 # Custom settings
 .vscode/
 *autoencoder_full.pt
+*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

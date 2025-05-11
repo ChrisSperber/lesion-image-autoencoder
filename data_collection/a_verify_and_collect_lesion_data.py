@@ -1,6 +1,6 @@
 """Identify local lesion images and validate data format.
 
-Images with unexpected values (<0, >1, only 0s) are excluded. Consistency of iamge shapes, voxel
+Images with unexpected values (<0, >1, only 0s) are excluded. Consistency of image shapes, voxel
 sizes, and affines is tested and printed to terminal.
 
 Requirements: Lesion segmentations are stored in LESION_DIR.

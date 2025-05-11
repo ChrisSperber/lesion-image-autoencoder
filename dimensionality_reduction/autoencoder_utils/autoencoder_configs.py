@@ -10,7 +10,7 @@ AUTOENCODER_OUTPUTS_DIR: Path = Path(__file__).parent / "outputs"
 
 # high sparsity of data caused model collapse with deep autoencoders on continuous data. A loss
 # weighting nudges models to focus on non-zero elements and hence prevent collapse.
-LESION_WEIGHT_MULTIPLIER = 40.00  # weighting factor for continuous data training
+LESION_WEIGHT_MULTIPLIER = 25.00  # weighting factor for continuous data training
 
 
 @dataclass

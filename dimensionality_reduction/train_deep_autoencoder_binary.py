@@ -1,7 +1,4 @@
-"""Train deep nonlinear autoencoder for binary images.
-
-Binary data are evaluated via BCELoss.
-"""
+"""Train deep nonlinear autoencoder for binary images."""
 
 # %%
 import json
@@ -13,6 +10,7 @@ import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
     AUTOENCODER_OUTPUTS_DIR,
+    LESION_WEIGHT_MULTIPLIER,
     TARGET_SHAPE_4CHANNEL,
     autoencoder_config,
 )
@@ -98,9 +96,9 @@ def train():  # noqa: D103, PLR0915
 
     # Loss, optimizer, and LR on plateau initialisation
     # weight_decay adds L2 regularisation to better handle the large-dimensional model
-    criterion = nn.BCELoss()
+    criterion = nn.BCELoss(reduction="none")
     optimizer = optim.Adam(
-        model.parameters(), lr=autoencoder_config.lr, weight_decay=1e-4
+        model.parameters(), lr=autoencoder_config.lr, weight_decay=1e-5
     )
 
     scheduler = ReduceLROnPlateau(
@@ -124,7 +122,9 @@ def train():  # noqa: D103, PLR0915
 
             optimizer.zero_grad()
             outputs = model(batch_gpu)
-            loss = criterion(outputs, batch_gpu)
+            loss_voxelwise = criterion(outputs, batch_gpu)
+            weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
+            loss = (loss_voxelwise * weights).mean()
             loss.backward()
             optimizer.step()
 
@@ -140,7 +140,9 @@ def train():  # noqa: D103, PLR0915
             for batch in val_loader:
                 batch_gpu = batch.to(device)
                 outputs = model(batch_gpu)
-                loss = criterion(outputs, batch_gpu)
+                loss_voxelwise = criterion(outputs, batch_gpu)
+                weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
+                loss = (loss_voxelwise * weights).mean()
                 val_loss += loss.item() * batch_gpu.size(0)
 
                 # Optional: Calculate Dice score
