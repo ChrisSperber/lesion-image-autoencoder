@@ -142,13 +142,13 @@ def train():  # noqa: D103, PLR0915
                 batch_gpu = batch.to(device)
                 outputs = model(batch_gpu)
                 loss_voxelwise = criterion(outputs, batch_gpu)
-                dice_loss = 1 - dice_score_autoencoder(outputs, batch_gpu)
+                dice_score = dice_score_autoencoder(outputs, batch_gpu)
+                dice_loss = 1 - dice_score
                 weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
                 loss = (loss_voxelwise * weights).mean() + dice_loss
                 val_loss += loss.item() * batch_gpu.size(0)
 
-                # Optional: Calculate Dice score
-                dice_total += dice_score_autoencoder(outputs, batch_gpu)
+                dice_total += dice_score
 
         val_loss /= len(val_loader.dataset)
         dice_avg = dice_total / len(val_loader)

@@ -13,17 +13,22 @@ import pandas as pd
 import torch
 from autoencoder_utils.autoencoder_configs import (
     AUTOENCODER_OUTPUTS_DIR,
+    DICE_LOSS_WEIGHTING,
     LESION_WEIGHT_MULTIPLIER,
     TARGET_SHAPE_4CHANNEL,
     autoencoder_config,
 )
 from autoencoder_utils.autoencoder_dataset import LesionDataset
-from autoencoder_utils.autoencoder_utils import AutoencoderType, get_batch_size_for_type
+from autoencoder_utils.autoencoder_utils import (
+    AutoencoderType,
+    dice_score_autoencoder,
+    get_batch_size_for_type,
+)
 from autoencoder_utils.models.autoencoder_linear import LinearAutoencoder
 from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, random_split
-from utils import N_LATENT_VARIABLES
+from utils import BINARISATION_THRESHOLD_ORIG_LESION, N_LATENT_VARIABLES
 
 AUTOENCODER_TYPE = AutoencoderType.LINEAR_CONTINUOUS_INPUT
 
@@ -96,7 +101,7 @@ def train():  # noqa: D103, PLR0915
 
     # Loss, optimizer, and LR on plateau initialisation
     # weight_decay adds L2 regularisation to better handle the large-dimensional model
-    criterion = nn.L1Loss()
+    criterion = nn.L1Loss(reduction="none")
     optimizer = optim.Adam(
         model.parameters(), lr=autoencoder_config.lr, weight_decay=1e-4
     )
@@ -123,8 +128,10 @@ def train():  # noqa: D103, PLR0915
             optimizer.zero_grad()
             outputs = model(batch_gpu)
             loss = criterion(outputs, batch_gpu)
-            weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
-            loss = (loss * weights).mean()
+            dice_loss = 1 - dice_score_autoencoder(outputs, batch_gpu)
+            lesion_mask = (batch_gpu > BINARISATION_THRESHOLD_ORIG_LESION).float()
+            weights = 1 + LESION_WEIGHT_MULTIPLIER * lesion_mask
+            loss = (loss * weights).mean() + dice_loss * DICE_LOSS_WEIGHTING
             loss.backward()
             optimizer.step()
 
@@ -135,16 +142,23 @@ def train():  # noqa: D103, PLR0915
         # ----- VALIDATE -----
         model.eval()
         val_loss = 0.0
+        dice_total = 0.0
         with torch.no_grad():
             for batch in val_loader:
                 batch_gpu = batch.to(device)
                 outputs = model(batch_gpu)
                 loss = criterion(outputs, batch_gpu)
-                weights = 1 + LESION_WEIGHT_MULTIPLIER * batch_gpu
-                loss = (loss * weights).mean()
+                dice_score = dice_score_autoencoder(outputs, batch_gpu)
+                dice_loss = 1 - dice_score
+                lesion_mask = (batch_gpu > BINARISATION_THRESHOLD_ORIG_LESION).float()
+                weights = 1 + LESION_WEIGHT_MULTIPLIER * lesion_mask
+                loss = (loss * weights).mean() + dice_loss * DICE_LOSS_WEIGHTING
                 val_loss += loss.item() * batch_gpu.size(0)
 
+                dice_total += dice_score
+
         val_loss /= len(val_loader.dataset)
+        dice_avg = dice_total / len(val_loader)
 
         # Logging
         current_lr = optimizer.param_groups[0]["lr"]
@@ -155,7 +169,9 @@ def train():  # noqa: D103, PLR0915
             f"Epoch [{epoch+1}/{epochs}] "
             f"Train Loss: {train_loss:.4f} "
             f"Val Loss: {val_loss:.4f} "
-            f"LR: {current_lr:.6f}"
+            f"LR: {current_lr:.6f} "
+            f"Val Dice: {dice_avg:.4f} "
+            f"Output mean: {outputs.mean().item():.4f}"
         )
 
         # adapt LR on plateau via scheduler
