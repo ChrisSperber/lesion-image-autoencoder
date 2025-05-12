@@ -42,6 +42,12 @@ BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
 device = autoencoder_config.device
 
+colname_mapping = {
+    "linear_binary_input": "BinaryLinearAE",
+    "linear_continuous_input": "ContinuousLinearAE",
+    "deep_nonlinear_binary_input": "BinaryDeepAE",
+    "deep_nonlinear_continuous_input": "ContinuousDeepAE",
+}
 
 # %%
 # load nifti paths
@@ -105,6 +111,7 @@ for autoencoder_type in AutoencoderType:
 
 # %%
 # store results
+results_df.rename(columns=colname_mapping, inplace=True)
 
 output_name = Path(__file__).with_suffix(".csv")
 results_df.to_csv(output_name, index=False, sep=";")
