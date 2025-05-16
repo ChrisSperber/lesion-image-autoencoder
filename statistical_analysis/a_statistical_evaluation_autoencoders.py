@@ -35,7 +35,7 @@ SUBJECT_ID = "SubjectID"
 
 ALPHA = 0.05  # statistical significance threshold for visualisation
 
-methods = ["PCA", "TruncSVD", "NMF", "LinearAE", "DeepAE"]
+methods = ["PCA", "TruncSVD", "NMF", "DeepAE"]
 data_types = ["Binary", "Continuous"]
 
 # %%
@@ -155,7 +155,7 @@ for xtick, method in enumerate(methods):
     median = medians[f"Continuous{method}"]
     ax.plot([xtick - 0.2, xtick + 0.2], [median, median], color="black", lw=2)
 
-plt.ylim(top=0.04)
+plt.ylim(bottom=0.0, top=0.035)
 
 plt.title("Continuous Data Reconstruction Mean Absolute Error")
 plt.xticks(rotation=45)
