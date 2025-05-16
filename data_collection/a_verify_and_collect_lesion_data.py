@@ -57,6 +57,26 @@ for path in local_nifti:
 
     subject_id = path.stem.replace("wroifinal", "Subject_")
 
+    # estimate lesion laterality
+    mid_idx = shape[0] // 2
+    TOLERANCE_VOXELS = 2
+    left_count = data_arr[: mid_idx + TOLERANCE_VOXELS, :, :].sum()
+    right_count = data_arr[mid_idx - TOLERANCE_VOXELS :, :, :].sum()
+    total = left_count + right_count
+    min_frac = 0.05  # % of total lesion threshold to assing lesion to hemisphere
+
+    left_present = left_count / total > min_frac
+    right_present = right_count / total > min_frac
+
+    if left_present and right_present:
+        hemisphere = "bilateral"
+    elif left_present:
+        hemisphere = "left"
+    elif right_present:
+        hemisphere = "right"
+    else:
+        raise ValueError(f"Unclear hemipshere for {path}")
+
     metadata = {
         "NiftiPath": str(path),
         "SubjectID": subject_id,
@@ -66,6 +86,7 @@ for path in local_nifti:
         "Affine": affine.tolist(),
         "LesionSizeML_p02": lesion_size_p02,
         "LesionSizeML_p05": lesion_size_p05,
+        "LesionLaterality": hemisphere,
     }
     image_data_list.append(metadata)
 
