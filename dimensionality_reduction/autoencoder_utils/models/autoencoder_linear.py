@@ -46,3 +46,7 @@ class LinearAutoencoder(nn.Module):
         recon = self.decoder(z)
         recon = recon.view(batch_size, *self.input_shape)
         return recon
+
+    def encode_latent(self, x: torch.Tensor) -> torch.Tensor:
+        """Encode input to latent vector (before decoding)."""
+        return self.encoder(x)

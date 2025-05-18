@@ -1,5 +1,6 @@
 """Model for deep, non-linear autoencoder."""
 
+import torch
 from autoencoder_utils.autoencoder_configs import TARGET_SHAPE_4CHANNEL
 from torch import nn
 from utils import N_LATENT_VARIABLES
@@ -61,3 +62,10 @@ class Conv3dAutoencoder(nn.Module):
         z_recon = self.fc_dec(z_latent).view(batch_size, 32, 10, 12, 10)
         x_recon = self.decoder(z_recon)
         return x_recon
+
+    def encode_latent(self, x: torch.Tensor) -> torch.Tensor:
+        """Encode input to latent vector (before decoding)."""
+        z = self.encoder(x)
+        z_flat = self.flatten(z)
+        z_latent = self.fc_enc(z_flat)
+        return z_latent
