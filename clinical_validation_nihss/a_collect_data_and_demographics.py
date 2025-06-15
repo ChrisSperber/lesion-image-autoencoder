@@ -31,6 +31,7 @@ DEMOGRAPHICS_XLS = Path(
 SUBJECT_ID = "SubjectID"
 LESION_LATERALITY = "LesionLaterality"
 LESION_VOLUME_ML = "LesionSizeML_p02"
+NIFTI_PATH = "NiftiPath"
 
 # relevant columns in demographics xls
 CASE_ID = "CaseIDmod"  # purely numeric with +100.000
@@ -133,7 +134,9 @@ with open(filename, "w") as f:
 # %%
 # extract and store dataset with valid NIHSS 24h scores
 data_temp = data_df[data_df[NIHSS_24H].notna()]
-data_nihss = data_temp[[SUBJECT_ID, NIHSS_24H]].copy()
+data_nihss = data_temp[
+    [SUBJECT_ID, NIFTI_PATH, NIHSS_24H, LESION_VOLUME_ML, AGE]
+].copy()
 output_name = Path(__file__).with_suffix(".csv")
 data_nihss.to_csv(output_name, index=False, sep=";")
 
