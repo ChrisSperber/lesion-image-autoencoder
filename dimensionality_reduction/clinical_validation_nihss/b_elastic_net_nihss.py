@@ -26,7 +26,7 @@ from utils import (
     train_test_split_indices,
 )
 
-N_PREDICTION_REPS = 50  # number of repeated cross-validations per data modality
+N_PREDICTION_REPS = 100  # number of repeated cross-validations per data modality
 # set minimum number of lesions per voxel to be considered informative and
 # included in the regression in the full voxel-wise data condition
 MIN_LESION_THRESHOLD = 10

@@ -20,7 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 DATA_CSV = (
-    Path(__file__).parents[1]
+    Path(__file__).parents[2]
     / "data_collection"
     / "a_verify_and_collect_lesion_data.csv"
 )
