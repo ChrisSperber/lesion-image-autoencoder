@@ -88,9 +88,7 @@ print(
 
 # %%
 # Truncated singular value decomposition on continuous data
-svd = TruncatedSVD(
-    n_components=N_LATENT_VARIABLES
-)  # use the same number of components here
+svd = TruncatedSVD(n_components=N_LATENT_VARIABLES)
 images_svd = svd.fit_transform(images_2d_arr)
 
 # Reconstruct the original-like array
@@ -157,9 +155,7 @@ reconstruction_output_pca_binary = [
 
 # %%
 # Truncated singular value decomposition on binary data
-svd = TruncatedSVD(
-    n_components=N_LATENT_VARIABLES
-)  # use the same number of components here
+svd = TruncatedSVD(n_components=N_LATENT_VARIABLES)
 images_svd_binary = svd.fit_transform(images_2d_arr_binary)
 
 # Reconstruct the original-like array

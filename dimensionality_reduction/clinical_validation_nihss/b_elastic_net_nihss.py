@@ -41,20 +41,18 @@ AGE = "Age"
 NIHSS_SCORES_CSV = Path(__file__).parent / "a_collect_data_and_demographics.csv"
 
 FULL_DATA_CSV = (
-    Path(__file__).parents[1]
+    Path(__file__).parents[2]
     / "data_collection"
     / "a_verify_and_collect_lesion_data.csv"
 )
 
 LATENTS_BASELINE_METHODS = (
     Path(__file__).parents[1]
-    / "dimensionality_reduction"
     / "output_compressed_images"
     / "compressed_images_pca_svd_nmf.npz"
 )
 LATENTS_DEEP_AE = (
     Path(__file__).parents[1]
-    / "dimensionality_reduction"
     / "output_compressed_images"
     / "compressed_images_deep_ae.npz"
 )
