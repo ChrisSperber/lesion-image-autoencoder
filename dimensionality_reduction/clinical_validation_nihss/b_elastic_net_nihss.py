@@ -14,11 +14,11 @@ Outputs:
 """
 
 # %%
-import time  # for debugging
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from sklearn.metrics import r2_score
 from utils import (
     fit_elastic_net_bayes_opt,
@@ -31,6 +31,7 @@ N_PREDICTION_REPS = 100  # number of repeated cross-validations per data modalit
 # included in the regression in the full voxel-wise data condition
 MIN_LESION_THRESHOLD = 10
 TEST_SIZE_RATIO = 0.2
+N_WORKERS = 8
 
 SUBJECT_ID = "SubjectID"
 NIHSS_24H = "NIHSS_24h"
@@ -118,26 +119,33 @@ imaging_modalities = {
     for modality, X in imaging_modalities.items()
 }
 
-# %%
-results = []
 
-for seed in range(0, N_PREDICTION_REPS):
+# %%
+# define function for parallelisation
+def run_prediction(seed):  # noqa: D103
+    results = []
     train_idx, test_idx = train_test_split_indices(
         len(target_nihss), TEST_SIZE_RATIO, seed
     )
     y_train, y_test = target_nihss[train_idx], target_nihss[test_idx]
 
-    for modality, X in imaging_modalities.items():
-        print(f"Fitting {modality} on split {seed}")
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S")  # for debugging
-        print(current_time)  # for debugging
-        X_train, X_test = X[train_idx], X[test_idx]
+    for modality, x in imaging_modalities.items():
 
-        model = fit_elastic_net_bayes_opt(X_train, y_train)
-        y_pred = model.predict(X_test)
+        x_train, x_test = x[train_idx], x[test_idx]
+        model = fit_elastic_net_bayes_opt(x_train, y_train)
+        y_pred = model.predict(x_test)
         r2 = r2_score(y_test, y_pred)
-
         results.append({"modality": modality, "split": seed, "r2": r2})
+    return results
+
+
+# %%
+# perform parallelised analysis
+
+all_results = Parallel(n_jobs=N_WORKERS, verbose=10)(
+    delayed(run_prediction)(seed) for seed in range(N_PREDICTION_REPS)
+)
+results = [item for sublist in all_results for item in sublist]
 
 # %%
 output_name = Path(__file__).with_suffix(".csv")
