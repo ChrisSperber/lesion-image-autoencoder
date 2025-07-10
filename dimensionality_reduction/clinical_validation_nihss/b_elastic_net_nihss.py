@@ -4,6 +4,12 @@ Elastic net regression is chosen as prediction algorithm, a linear regression me
 regularisation. Hyperparameters L1 ratio and alpha define the regularisation and are chosen for each
 model with Bayesian optimisation.
 
+A first approach included voxel-wise data as a baseline predictor. However, the computation times
+for regression modelling increased from ~20s per model to >1h. Even with parallelisation - which
+was limited due to RAM bottlenecks - computation times were at ~3days for 100 repetitions. Hence,
+to reliably estimate the predictive performance of each latent variable type, voxel-wise data were
+dropped from the analysis. The code was kept as a comment for documentation.
+
 Requirements:
     - valid subjects were identified in a_collect_data_and_demographics.py
     - latent variables were stored for baseline methods pca/truncated svd/nmf and deep AEs in
@@ -26,12 +32,12 @@ from utils import (
     train_test_split_indices,
 )
 
-N_PREDICTION_REPS = 100  # number of repeated cross-validations per data modality
+N_PREDICTION_REPS = 250  # number of repeated cross-validations per data modality
 # set minimum number of lesions per voxel to be considered informative and
 # included in the regression in the full voxel-wise data condition
 MIN_LESION_THRESHOLD = 10
 TEST_SIZE_RATIO = 0.2
-N_WORKERS = 8
+N_WORKERS = 5  # higher numbers evoke memory limitation errors
 
 SUBJECT_ID = "SubjectID"
 NIHSS_24H = "NIHSS_24h"
@@ -105,13 +111,18 @@ latent_modalities.update(
 for key in latent_modalities:
     latent_modalities[key] = latent_modalities[key][included_subjects_idx]
 
-# Add voxelwise modalities
-voxelwise_modalities = {
-    "voxelwise_cont": voxelwise_images_cont,
-    "voxelwise_binary": voxelwise_images_binary,
-}
 
-imaging_modalities = {**latent_modalities, **voxelwise_modalities}
+## voxel-wise data were discarded from the analysis as described in the docstring
+# # Add voxelwise modalities
+# voxelwise_modalities = {
+#     "voxelwise_cont": voxelwise_images_cont,
+#     "voxelwise_binary": voxelwise_images_binary,
+# }
+
+# imaging_modalities = {**latent_modalities, **voxelwise_modalities}
+##
+
+imaging_modalities = {**latent_modalities}
 
 # Augment each modality with baseline vars age and lesion volume
 imaging_modalities = {
