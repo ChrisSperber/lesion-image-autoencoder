@@ -1,0 +1,82 @@
+[
+  {
+    "Data_type": "Binary",
+    "Latent_method": "PCA",
+    "Kendall's Tau": 0.7274222731289608,
+    "pval": 8.59629906168699e-255,
+    "95%-CI": [
+      0.7111494890548186,
+      0.7428470870405276
+    ]
+  },
+  {
+    "Data_type": "Binary",
+    "Latent_method": "TruncSVD",
+    "Kendall's Tau": 0.7303759228258527,
+    "pval": 9.552452505044168e-257,
+    "95%-CI": [
+      0.7138433884455629,
+      0.7457952628437797
+    ]
+  },
+  {
+    "Data_type": "Binary",
+    "Latent_method": "NMF",
+    "Kendall's Tau": 0.6871978837275103,
+    "pval": 3.275128307967079e-227,
+    "95%-CI": [
+      0.6688769715128627,
+      0.7039208490895872
+    ]
+  },
+  {
+    "Data_type": "Binary",
+    "Latent_method": "DeepAE",
+    "Kendall's Tau": 0.6287670563811909,
+    "pval": 3.275597781676167e-210,
+    "95%-CI": [
+      0.6054922104312962,
+      0.653293147532372
+    ]
+  },
+  {
+    "Data_type": "Continuous",
+    "Latent_method": "PCA",
+    "Kendall's Tau": 0.8922090412253423,
+    "pval": 0.0,
+    "95%-CI": [
+      0.8837373220784372,
+      0.8995844262119537
+    ]
+  },
+  {
+    "Data_type": "Continuous",
+    "Latent_method": "TruncSVD",
+    "Kendall's Tau": 0.8903827594083844,
+    "pval": 0.0,
+    "95%-CI": [
+      0.8817619282006792,
+      0.8973268362488508
+    ]
+  },
+  {
+    "Data_type": "Continuous",
+    "Latent_method": "NMF",
+    "Kendall's Tau": 0.8677018497004136,
+    "pval": 0.0,
+    "95%-CI": [
+      0.8510072193358817,
+      0.8826847455756774
+    ]
+  },
+  {
+    "Data_type": "Continuous",
+    "Latent_method": "DeepAE",
+    "Kendall's Tau": 0.8275270825878996,
+    "pval": 0.0,
+    "95%-CI": [
+      0.815469303287687,
+      0.8384752639828615
+    ]
+  }
+]
