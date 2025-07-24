@@ -5,8 +5,7 @@ better understand the main results.
 
 Requirements:
     - simple_feature_reduction.py was succesfully run and reconstruction errors were stored in a csv
-    - all autoencoders were succesfully trained and their reconstruction errors were evaluated with
-        evaluate_autoencoders.py and stored in a csv
+    - autoencoders were evaluated with evaluate_autoencoders.py and stored in a csv
 
 Outputs:
     - json file documenting statistical results
