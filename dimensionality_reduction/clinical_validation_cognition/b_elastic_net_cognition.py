@@ -107,7 +107,7 @@ imaging_modalities = {
 
 # %%
 # define functions for parallelisation
-def run_prediction_selective_attention(seed):  # noqa: D103
+def _run_prediction_selective_attention(seed):
     results = []
     train_idx, test_idx = train_test_split_indices(
         len(target_selective_attention), TEST_SIZE_RATIO, seed
@@ -127,7 +127,7 @@ def run_prediction_selective_attention(seed):  # noqa: D103
     return results
 
 
-def run_prediction_word_fluency(seed):  # noqa: D103
+def _run_prediction_word_fluency(seed):
     results = []
     train_idx, test_idx = train_test_split_indices(
         len(target_word_fluency), TEST_SIZE_RATIO, seed
@@ -151,7 +151,7 @@ def run_prediction_word_fluency(seed):  # noqa: D103
 # perform parallelised analysis for selective attention
 
 all_results_selective_attention = Parallel(n_jobs=N_WORKERS, verbose=10)(
-    delayed(run_prediction_selective_attention)(seed)
+    delayed(_run_prediction_selective_attention)(seed)
     for seed in range(N_PREDICTION_REPS)
 )
 results = [item for sublist in all_results_selective_attention for item in sublist]
@@ -173,7 +173,7 @@ for modality in results_df["modality"].unique():
 # perform parallelised analysis for word fluency
 
 all_results_word_fluency = Parallel(n_jobs=N_WORKERS, verbose=10)(
-    delayed(run_prediction_word_fluency)(seed) for seed in range(N_PREDICTION_REPS)
+    delayed(_run_prediction_word_fluency)(seed) for seed in range(N_PREDICTION_REPS)
 )
 results = [item for sublist in all_results_word_fluency for item in sublist]
 

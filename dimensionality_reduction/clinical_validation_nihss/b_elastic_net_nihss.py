@@ -133,12 +133,13 @@ imaging_modalities = {
 
 # %%
 # define function for parallelisation
-def run_prediction(seed):  # noqa: D103
+def _run_prediction(seed):
     results = []
     train_idx, test_idx = train_test_split_indices(
         len(target_nihss), TEST_SIZE_RATIO, seed
     )
     y_train, y_test = target_nihss[train_idx], target_nihss[test_idx]
+    lesion_size_test = nihss_df[LESION_VOLUME_ML].to_numpy()[test_idx]
 
     for modality, x in imaging_modalities.items():
 
@@ -146,7 +147,41 @@ def run_prediction(seed):  # noqa: D103
         model = fit_elastic_net_bayes_opt(x_train, y_train)
         y_pred = model.predict(x_test)
         r2 = r2_score(y_test, y_pred)
-        results.append({"modality": modality, "split": seed, "r2": r2})
+
+        # Compute quartiles
+        lower_quantile = lesion_size_test <= np.percentile(lesion_size_test, 25)
+        upper_quantile = lesion_size_test >= np.percentile(lesion_size_test, 75)
+
+        # define function to collect values for posthoc analysis comparing small vs large lesions
+        def get_summary(true_values, pred_values, mask):
+            if np.sum(mask) == 0:
+                return (np.nan, np.nan, np.nan)
+            true = true_values[mask]
+            pred = pred_values[mask]
+            return (
+                np.mean(true),
+                np.mean(pred),
+                np.mean(np.abs(true - pred)),
+            )
+
+        (nihss_low, pred_low, absres_low) = get_summary(y_test, y_pred, lower_quantile)
+        (nihss_high, pred_high, absres_high) = get_summary(
+            y_test, y_pred, upper_quantile
+        )
+
+        results.append(
+            {
+                "modality": modality,
+                "split": seed,
+                "r2": r2,
+                "mean_nihss_low": nihss_low,
+                "mean_pred_low": pred_low,
+                "mean_absres_low": absres_low,
+                "mean_nihss_high": nihss_high,
+                "mean_pred_high": pred_high,
+                "mean_absres_high": absres_high,
+            }
+        )
     return results
 
 
@@ -154,7 +189,7 @@ def run_prediction(seed):  # noqa: D103
 # perform parallelised analysis
 
 all_results = Parallel(n_jobs=N_WORKERS, verbose=10)(
-    delayed(run_prediction)(seed) for seed in range(N_PREDICTION_REPS)
+    delayed(_run_prediction)(seed) for seed in range(N_PREDICTION_REPS)
 )
 results = [item for sublist in all_results for item in sublist]
 
