@@ -18,7 +18,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from IPython.display import display
-from scipy.stats import f_oneway, ttest_rel
+from scipy.stats import ttest_rel
+from statsmodels.stats.anova import AnovaRM
 from statsmodels.stats.multitest import multipletests
 
 ELASTIC_NET_CSV_PATH = Path(__file__).parent / "b_elastic_net_nihss.csv"
@@ -94,7 +95,6 @@ results_dfs = {"elastic_net": results_df_elastic_net, "svr": results_df_svr}
 
 # %%
 # add helper function to reduce redundant code
-# Add helper function at the top
 def _get_modality_subset(df, data_type: str) -> pd.DataFrame:
     df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
     df_subset["mod_base"] = df_subset[MODALITY].str.replace(
@@ -157,9 +157,21 @@ for model_name, df in results_dfs.items():
         # Pivot table to wide format: rows = subjects, columns = modalities
         pivoted = df_subset.pivot(index=SPLIT, columns="mod_pretty", values=R2_SCORE)
 
-        # One-way repeated measures ANOVA
-        samples = [pivoted[modality] for modality in pivoted.columns]
-        anova_stat, anova_p = f_oneway(*samples)
+        # Prepare long format
+        long_df = pivoted.reset_index().melt(
+            id_vars=SPLIT, var_name="mod_pretty", value_name=R2_SCORE
+        )
+
+        # Repeated Measures ANOVA
+        aovrm = AnovaRM(
+            data=long_df, depvar=R2_SCORE, subject=SPLIT, within=["mod_pretty"]
+        )
+        anova_res = aovrm.fit()
+
+        # Extract F and p-value
+        anova_table = anova_res.anova_table
+        anova_stat = anova_table["F Value"].iloc[0]
+        anova_p = anova_table["Pr > F"].iloc[0]
 
         # Pairwise t-tests (paired, repeated measures)
         raw_pvals = []

@@ -2,8 +2,8 @@
   "elastic_net": {
     "cont": {
       "anova": {
-        "statistic": 24.203388206445066,
-        "p_value": 4.022306652771303e-15
+        "statistic": 104.70288055458506,
+        "p_value": 1.3804120133681588e-56
       },
       "t_test_posthoc": [
         {
@@ -186,8 +186,8 @@
     },
     "binary": {
       "anova": {
-        "statistic": 64.13990399697126,
-        "p_value": 6.403811167371726e-38
+        "statistic": 294.85493055779403,
+        "p_value": 3.048715780702716e-126
       },
       "t_test_posthoc": [
         {
@@ -372,8 +372,8 @@
   "svr": {
     "cont": {
       "anova": {
-        "statistic": 19.70877177935848,
-        "p_value": 2.043244508578009e-12
+        "statistic": 183.1201997848412,
+        "p_value": 5.43923811441665e-89
       },
       "t_test_posthoc": [
         {
@@ -556,8 +556,8 @@
     },
     "binary": {
       "anova": {
-        "statistic": 8.936178169843958,
-        "p_value": 7.612944794712829e-06
+        "statistic": 70.74771784302933,
+        "p_value": 2.8079370165882864e-40
       },
       "t_test_posthoc": [
         {
