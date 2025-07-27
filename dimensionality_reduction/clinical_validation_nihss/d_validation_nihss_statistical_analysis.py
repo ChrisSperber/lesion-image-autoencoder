@@ -91,6 +91,19 @@ _clip_column(results_df_elastic_net, MEAN_ABS_RESIDUAL_LARGE_LESION, 0, 0.99)
 
 results_dfs = {"elastic_net": results_df_elastic_net, "svr": results_df_svr}
 
+
+# %%
+# add helper function to reduce redundant code
+# Add helper function at the top
+def _get_modality_subset(df, data_type: str) -> pd.DataFrame:
+    df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
+    df_subset["mod_base"] = df_subset[MODALITY].str.replace(
+        f"_{data_type}$", "", regex=True
+    )
+    df_subset["mod_pretty"] = df_subset["mod_base"].map(MODALITY_NAME_MAP)
+    return df_subset
+
+
 # %%
 # main analyses
 statistical_results = {}
@@ -104,14 +117,7 @@ for model_name, df in results_dfs.items():
     for data_type in DATA_TYPES:
         print(f"  Data type: {data_type}")
 
-        # Filter rows for current data type
-        df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
-
-        # Extract base modality name and rename column for figure
-        df_subset["mod_base"] = df_subset[MODALITY].str.replace(
-            f"_{data_type}$", "", regex=True
-        )
-        df_subset["mod_pretty"] = df_subset["mod_base"].map(MODALITY_NAME_MAP)
+        df_subset = _get_modality_subset(df, data_type)
 
         plt.figure(figsize=(5, 6))
         ax = sns.swarmplot(data=df_subset, x="mod_pretty", y=R2_SCORE, size=2)
@@ -146,11 +152,7 @@ for model_name, df in results_dfs.items():
 
     for data_type in DATA_TYPES:
         print(f"  Data type: {data_type}")
-        df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
-        df_subset["mod_base"] = df_subset[MODALITY].str.replace(
-            f"_{data_type}$", "", regex=True
-        )
-        df_subset["mod_pretty"] = df_subset["mod_base"].map(MODALITY_NAME_MAP)
+        df_subset = _get_modality_subset(df, data_type)
 
         # Pivot table to wide format: rows = subjects, columns = modalities
         pivoted = df_subset.pivot(index=SPLIT, columns="mod_pretty", values=R2_SCORE)
@@ -198,11 +200,7 @@ for model_name, df in results_dfs.items():
     ######
     # Descriptive Statistics
     for data_type in DATA_TYPES:
-        df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
-        df_subset["mod_base"] = df_subset[MODALITY].str.replace(
-            f"_{data_type}$", "", regex=True
-        )
-        df_subset["mod_pretty"] = df_subset["mod_base"].map(MODALITY_NAME_MAP)
+        df_subset = _get_modality_subset(df, data_type)
 
         group_stats = {}
         for mod_name, group in df_subset.groupby("mod_pretty"):
@@ -221,11 +219,7 @@ for model_name, df in results_dfs.items():
     table_data = defaultdict(dict)  # metric -> column name -> value
 
     for data_type in DATA_TYPES:
-        df_subset = df[df[MODALITY].str.endswith(f"_{data_type}")].copy()
-        df_subset["mod_base"] = df_subset[MODALITY].str.replace(
-            f"_{data_type}$", "", regex=True
-        )
-        df_subset["mod_pretty"] = df_subset["mod_base"].map(MODALITY_NAME_MAP)
+        df_subset = _get_modality_subset(df, data_type)
 
         for mod_name, group in df_subset.groupby("mod_pretty"):
             col_label = f"{mod_name} ({data_type})"
