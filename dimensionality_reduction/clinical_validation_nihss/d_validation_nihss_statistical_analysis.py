@@ -168,7 +168,6 @@ for model_name, df in results_dfs.items():
         )
         anova_res = aovrm.fit()
 
-        # Extract F and p-value
         anova_table = anova_res.anova_table
         anova_stat = anova_table["F Value"].iloc[0]
         anova_p = anova_table["Pr > F"].iloc[0]
