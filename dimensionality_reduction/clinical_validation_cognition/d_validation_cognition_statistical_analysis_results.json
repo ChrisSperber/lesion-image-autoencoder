@@ -1,0 +1,354 @@
+{
+  "elastic_net_selattention": {
+    "anova": {
+      "statistic": 144.17379784528134,
+      "p_value": 1.059997964949727e-73
+    },
+    "t_test_posthoc": [
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "NMF"
+        ],
+        "statistic": 5.477253426886318,
+        "p_value_uncorrected": 1.0552138570516746e-07,
+        "p_value_corrected": 1.0552138570516746e-07
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "PCA"
+        ],
+        "statistic": -15.741983163011808,
+        "p_value_uncorrected": 3.190343922080573e-39,
+        "p_value_corrected": 1.5951719610402865e-38
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "Truncated SVD"
+        ],
+        "statistic": -8.309835133329727,
+        "p_value_uncorrected": 6.231618962271893e-15,
+        "p_value_corrected": 1.2463237924543786e-14
+      },
+      {
+        "comparison": [
+          "NMF",
+          "PCA"
+        ],
+        "statistic": -16.99330602423013,
+        "p_value_uncorrected": 1.600462877704411e-43,
+        "p_value_corrected": 9.602777266226465e-43
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Truncated SVD"
+        ],
+        "statistic": -11.622822084425446,
+        "p_value_uncorrected": 3.105182952966722e-25,
+        "p_value_corrected": 1.2420731811866888e-24
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Truncated SVD"
+        ],
+        "statistic": 8.9109191618627,
+        "p_value_uncorrected": 1.0972564274312197e-16,
+        "p_value_corrected": 3.291769282293659e-16
+      }
+    ],
+    "descriptive_stats": {
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.10769700039708031,
+          "std": 0.12823652186021756
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.04958932588533974,
+          "std": 0.15955257570399298
+        }
+      },
+      "PCA": {
+        "r2": {
+          "mean": 0.22437148577103125,
+          "std": 0.12103004247079156
+        }
+      },
+      "Truncated SVD": {
+        "r2": {
+          "mean": 0.1769214099748994,
+          "std": 0.14237823908959693
+        }
+      }
+    }
+  },
+  "svr_selattention": {
+    "anova": {
+      "statistic": 37.07618306089496,
+      "p_value": 2.4195020282400938e-22
+    },
+    "t_test_posthoc": [
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "NMF"
+        ],
+        "statistic": -1.190888045000762,
+        "p_value_uncorrected": 0.23483154469448053,
+        "p_value_corrected": 0.243457609381174
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "PCA"
+        ],
+        "statistic": -9.475705792542813,
+        "p_value_uncorrected": 2.176228938439134e-18,
+        "p_value_corrected": 1.3057373630634804e-17
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "Truncated SVD"
+        ],
+        "statistic": -8.922198003516908,
+        "p_value_uncorrected": 1.0157782732909616e-16,
+        "p_value_corrected": 5.078891366454808e-16
+      },
+      {
+        "comparison": [
+          "NMF",
+          "PCA"
+        ],
+        "statistic": -5.966897717963977,
+        "p_value_uncorrected": 8.265221279988447e-09,
+        "p_value_corrected": 3.306088511995379e-08
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Truncated SVD"
+        ],
+        "statistic": -5.395123939091891,
+        "p_value_uncorrected": 1.592768429108902e-07,
+        "p_value_corrected": 4.778305287326706e-07
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Truncated SVD"
+        ],
+        "statistic": 1.5528509766777292,
+        "p_value_uncorrected": 0.121728804690587,
+        "p_value_corrected": 0.243457609381174
+      }
+    ],
+    "descriptive_stats": {
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.09107600264273581,
+          "std": 0.14096251811409838
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.10618703390941465,
+          "std": 0.20746720801718613
+        }
+      },
+      "PCA": {
+        "r2": {
+          "mean": 0.1772525258585326,
+          "std": 0.15039911881860585
+        }
+      },
+      "Truncated SVD": {
+        "r2": {
+          "mean": 0.17053248552003913,
+          "std": 0.15352884950310344
+        }
+      }
+    }
+  },
+  "elastic_net_wordfluency": {
+    "anova": {
+      "statistic": 9.183063762257127,
+      "p_value": 5.687929843354405e-06
+    },
+    "t_test_posthoc": [
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "NMF"
+        ],
+        "statistic": 1.4867654238361792,
+        "p_value_uncorrected": 0.1383419033055156,
+        "p_value_corrected": 0.28360439262049286
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "PCA"
+        ],
+        "statistic": -1.678342532751023,
+        "p_value_uncorrected": 0.09453479754016429,
+        "p_value_corrected": 0.28360439262049286
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "Truncated SVD"
+        ],
+        "statistic": 3.525120662781854,
+        "p_value_uncorrected": 0.0005036455460268643,
+        "p_value_corrected": 0.0025182277301343215
+      },
+      {
+        "comparison": [
+          "NMF",
+          "PCA"
+        ],
+        "statistic": -2.6363207338054546,
+        "p_value_uncorrected": 0.008907712151616938,
+        "p_value_corrected": 0.03563084860646775
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Truncated SVD"
+        ],
+        "statistic": 1.6247312398047653,
+        "p_value_uncorrected": 0.10548492678254892,
+        "p_value_corrected": 0.28360439262049286
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Truncated SVD"
+        ],
+        "statistic": 8.486620211526553,
+        "p_value_uncorrected": 1.9286881668513052e-15,
+        "p_value_corrected": 1.1572129001107832e-14
+      }
+    ],
+    "descriptive_stats": {
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.0352442052693315,
+          "std": 0.09276052940253326
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.026159052318427647,
+          "std": 0.09291898867371498
+        }
+      },
+      "PCA": {
+        "r2": {
+          "mean": 0.044672733400852475,
+          "std": 0.10758337079817624
+        }
+      },
+      "Truncated SVD": {
+        "r2": {
+          "mean": 0.014175293054136933,
+          "std": 0.11784125953205715
+        }
+      }
+    }
+  },
+  "svr_wordfluency": {
+    "anova": {
+      "statistic": 47.837452512942136,
+      "p_value": 2.7565841766541936e-28
+    },
+    "t_test_posthoc": [
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "NMF"
+        ],
+        "statistic": -9.75673345820341,
+        "p_value_uncorrected": 2.9711134432280974e-19,
+        "p_value_corrected": 1.7826680659368586e-18
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "PCA"
+        ],
+        "statistic": -8.891151453369018,
+        "p_value_uncorrected": 1.255992839224863e-16,
+        "p_value_corrected": 6.279964196124315e-16
+      },
+      {
+        "comparison": [
+          "Deep Autoencoder",
+          "Truncated SVD"
+        ],
+        "statistic": -8.054992663120156,
+        "p_value_uncorrected": 3.3003628947471887e-14,
+        "p_value_corrected": 1.3201451578988755e-13
+      },
+      {
+        "comparison": [
+          "NMF",
+          "PCA"
+        ],
+        "statistic": 1.5102841744057995,
+        "p_value_uncorrected": 0.1322388650792521,
+        "p_value_corrected": 0.2644777301585042
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Truncated SVD"
+        ],
+        "statistic": 1.8412256156206266,
+        "p_value_uncorrected": 0.06677803426268894,
+        "p_value_corrected": 0.20033410278806682
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Truncated SVD"
+        ],
+        "statistic": 0.8321714717803238,
+        "p_value_uncorrected": 0.4061095501378943,
+        "p_value_corrected": 0.4061095501378943
+      }
+    ],
+    "descriptive_stats": {
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": -0.03660962547400982,
+          "std": 0.1369649330712687
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.049593514130078335,
+          "std": 0.14187487180550495
+        }
+      },
+      "PCA": {
+        "r2": {
+          "mean": 0.0370184454386903,
+          "std": 0.14152063502703224
+        }
+      },
+      "Truncated SVD": {
+        "r2": {
+          "mean": 0.03379335628611692,
+          "std": 0.15161312181987185
+        }
+      }
+    }
+  }
+}
