@@ -1,10 +1,10 @@
 """Explore lesion sample to find optimal shapes for images in the analysis.
 
 An overlay topography of all lesions is generated and the minimum shape required to retain all
-relevant information is assessed. This information in required to decide optimal cropping/padding
+relevant information is assessed. This information is required to decide on optimal cropping/padding
 strategies.
 
-Voxels with values p(lesion)<0.2 are ignored to remove noise.
+Voxels with values <0.2 are ignored to remove noise.
 
 Outputs: Overlay topography of all lesions.
 """

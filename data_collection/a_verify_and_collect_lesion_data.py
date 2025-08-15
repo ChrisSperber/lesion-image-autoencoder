@@ -63,7 +63,7 @@ for path in local_nifti:
     left_count = data_arr[: mid_idx + TOLERANCE_VOXELS, :, :].sum()
     right_count = data_arr[mid_idx - TOLERANCE_VOXELS :, :, :].sum()
     total = left_count + right_count
-    min_frac = 0.05  # % of total lesion threshold to assing lesion to hemisphere
+    min_frac = 0.05  # % of total lesion threshold to assign lesion to hemisphere
 
     left_present = left_count / total > min_frac
     right_present = right_count / total > min_frac

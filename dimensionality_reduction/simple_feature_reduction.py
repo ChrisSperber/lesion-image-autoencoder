@@ -4,7 +4,7 @@ Data are compressed with standard PCA, truncated SVD (which is suited for highly
 it might be better at handling lesion data) and non-negative matrix factorisation.
 Methods are either used on the continuous segmentation data or binarised segmentation maps that were
 binarised to 1|0 at BINARISATION_THRESHOLD, with subsequent binarisation of reconstructed maps at
-at p=0.5.
+at BINARISATION_THRESHOLD_OUTPUTS p=0.5.
 Logistic PCA was tested but was found to be unsuited for the large dataset.
 
 Requirements:
@@ -39,7 +39,8 @@ SUBJECT_ID = "SubjectID"
 # folder to store the compressed data
 OUTPUT_DIR_COMPRESSED_DATA = "output_compressed_images"
 
-# to apply continuous methods on binary data, reconstructed data are binarised at 0.5
+# to evaluate continuous methods on binary data, reconstructed data are binarised at 0.5 so that
+# binary output data can be compared to binary original data.
 BINARISATION_THRESHOLD_OUTPUTS = 0.5
 
 MAXIMUM_ITERATIONS_NMF = 300  # default 200 gave warning, hence increased
