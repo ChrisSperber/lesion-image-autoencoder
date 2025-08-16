@@ -60,7 +60,10 @@ def unpad_to_shape(padded_img: np.ndarray, original_shape: tuple):
     return padded_img[tuple(slices)]
 
 
-def load_vectorised_images(lesion_path_list: list[str]) -> np.ndarray:
+def load_vectorised_images(
+    lesion_path_list: list[str],
+    noise_threshold: float = BINARISATION_THRESHOLD_ORIG_LESION,
+) -> np.ndarray:
     """Load lesion segmentations from NIfTI files and return a 2D array.
 
     Each image is flattened into a 1D vector (row), resulting in a 2D matrix
@@ -69,6 +72,8 @@ def load_vectorised_images(lesion_path_list: list[str]) -> np.ndarray:
     Args:
         lesion_path_list: List of file paths to 3D lesion NIfTI images. All images must have the
             same shape.
+        noise_threshold: All values below this threshold are set to 0, mirroring the procedures in
+            the autoencoder dataset.
 
     Returns:
         2D NumPy array of shape (n_images, n_voxels).
@@ -78,6 +83,10 @@ def load_vectorised_images(lesion_path_list: list[str]) -> np.ndarray:
     for path in lesion_path_list:
         img = nib.load(path)
         data = img.get_fdata(dtype=np.float32)
+
+        # Threshold small values to zero
+        data[data < noise_threshold] = 0.0
+
         images.append(data.ravel())
     return np.stack(images)
 

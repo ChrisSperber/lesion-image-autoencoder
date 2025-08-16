@@ -6,7 +6,7 @@ Requirements:
         evaluate_autoencoders.py and stored in a csv
 
 Outputs:
-    - json file documenting statistical results
+    - file statistical_results.json documenting statistical results
     - plots of reconstruction errors
 
 """

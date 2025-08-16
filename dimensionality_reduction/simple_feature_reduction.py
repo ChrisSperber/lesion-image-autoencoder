@@ -84,7 +84,7 @@ reconstruction_output_pca = [
 total_explained_variance = np.cumsum(pca.explained_variance_ratio_)
 print(
     f"Number of latent variables is {N_LATENT_VARIABLES} explaining "
-    f"{total_explained_variance[-1]}% of variance in the PCA with continuous data"
+    f"{total_explained_variance[-1]} of variance in the PCA with continuous data"
 )
 
 # %%

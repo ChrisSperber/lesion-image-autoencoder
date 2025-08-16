@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 from clinical_validation_nihss.utils import (
     fit_svr_bayes_opt,
-    load_masked_vectorised_images,
+    load_vectorised_images,
     train_test_split_indices,
 )
 from joblib import Parallel, delayed
@@ -64,9 +64,7 @@ latents_all_methods = np.load(
     LATENTS_ALL_METHODS
 )  # gives lazy access handle to the arrays
 
-voxelwise_images_cont = load_masked_vectorised_images(
-    lesion_path_list=lesion_nifti_path_list, min_lesion_threshold=MIN_LESION_THRESHOLD
-)
+voxelwise_images_cont = load_vectorised_images(lesion_path_list=lesion_nifti_path_list)
 voxelwise_images_binary = (voxelwise_images_cont > 0).astype(int)
 
 # target scores are selective attention and word fluency

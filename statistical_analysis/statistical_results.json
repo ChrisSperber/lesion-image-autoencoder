@@ -1,8 +1,8 @@
 {
   "Binary": {
     "friedman_test": {
-      "statistic": 830.3414872798445,
-      "p_value": 1.1369137250207424e-179
+      "statistic": 848.691622297076,
+      "p_value": 1.1906432096206927e-183
     },
     "wilcoxon_posthoc": [
       {
@@ -10,45 +10,45 @@
           "BinaryPCA",
           "BinaryTruncSVD"
         ],
-        "statistic": 93731.0,
-        "p_value_uncorrected": 0.00012294422387171855,
-        "p_value_corrected": 0.00012294422387171855
+        "statistic": 106287.0,
+        "p_value_uncorrected": 0.1406591509111796,
+        "p_value_corrected": 0.1406591509111796
       },
       {
         "comparison": [
           "BinaryPCA",
           "BinaryNMF"
         ],
-        "statistic": 37427.0,
-        "p_value_uncorrected": 7.481668606429866e-54,
-        "p_value_corrected": 2.2445005819289596e-53
+        "statistic": 37307.0,
+        "p_value_uncorrected": 1.914303252998312e-54,
+        "p_value_corrected": 5.742909758994936e-54
       },
       {
         "comparison": [
           "BinaryPCA",
           "BinaryDeepAE"
         ],
-        "statistic": 88106.0,
-        "p_value_uncorrected": 1.8655366761516879e-87,
-        "p_value_corrected": 7.4621467046067515e-87
+        "statistic": 87725.0,
+        "p_value_uncorrected": 8.889527233294792e-88,
+        "p_value_corrected": 3.5558108933179167e-87
       },
       {
         "comparison": [
           "BinaryTruncSVD",
           "BinaryNMF"
         ],
-        "statistic": 41004.0,
-        "p_value_uncorrected": 1.6024189221696796e-49,
-        "p_value_corrected": 3.2048378443393593e-49
+        "statistic": 38912.0,
+        "p_value_uncorrected": 2.2455158451364056e-52,
+        "p_value_corrected": 4.491031690272811e-52
       },
       {
         "comparison": [
           "BinaryTruncSVD",
           "BinaryDeepAE"
         ],
-        "statistic": 87365.0,
-        "p_value_uncorrected": 4.4070169058589373e-88,
-        "p_value_corrected": 2.2035084529294687e-87
+        "statistic": 87503.0,
+        "p_value_uncorrected": 5.767968430133801e-88,
+        "p_value_corrected": 2.8839842150669005e-87
       },
       {
         "comparison": [
@@ -63,7 +63,7 @@
   },
   "Continuous": {
     "friedman_test": {
-      "statistic": 2359.2522222222215,
+      "statistic": 2332.786666666667,
       "p_value": 0.0
     },
     "wilcoxon_posthoc": [
@@ -72,54 +72,54 @@
           "ContinuousPCA",
           "ContinuousTruncSVD"
         ],
-        "statistic": 272035.0,
-        "p_value_uncorrected": 0.0530423902808764,
-        "p_value_corrected": 0.0530423902808764
+        "statistic": 283350.0,
+        "p_value_uncorrected": 0.40598218588081414,
+        "p_value_corrected": 0.40598218588081414
       },
       {
         "comparison": [
           "ContinuousPCA",
           "ContinuousNMF"
         ],
-        "statistic": 11103.0,
-        "p_value_uncorrected": 4.2337377439715857e-165,
-        "p_value_corrected": 2.116868871985793e-164
+        "statistic": 9949.0,
+        "p_value_uncorrected": 1.9214091989683344e-166,
+        "p_value_corrected": 9.607045994841672e-166
       },
       {
         "comparison": [
           "ContinuousPCA",
           "ContinuousDeepAE"
         ],
-        "statistic": 15168.0,
-        "p_value_uncorrected": 2.0610261348024353e-160,
-        "p_value_corrected": 8.244104539209741e-160
+        "statistic": 15255.0,
+        "p_value_uncorrected": 2.5921385292182292e-160,
+        "p_value_corrected": 1.0368554116872917e-159
       },
       {
         "comparison": [
           "ContinuousTruncSVD",
           "ContinuousNMF"
         ],
-        "statistic": 8912.0,
-        "p_value_uncorrected": 1.1803238764781496e-167,
-        "p_value_corrected": 7.081943258868898e-167
+        "statistic": 7494.0,
+        "p_value_uncorrected": 2.558850646771205e-169,
+        "p_value_corrected": 1.535310388062723e-168
       },
       {
         "comparison": [
           "ContinuousTruncSVD",
           "ContinuousDeepAE"
         ],
-        "statistic": 15665.0,
-        "p_value_uncorrected": 7.629533427266705e-160,
-        "p_value_corrected": 2.2888600281800116e-159
+        "statistic": 16276.0,
+        "p_value_uncorrected": 3.800989977810839e-159,
+        "p_value_corrected": 1.1402969933432517e-158
       },
       {
         "comparison": [
           "ContinuousNMF",
           "ContinuousDeepAE"
         ],
-        "statistic": 92783.0,
-        "p_value_uncorrected": 5.475010719699155e-84,
-        "p_value_corrected": 1.095002143939831e-83
+        "statistic": 100843.0,
+        "p_value_uncorrected": 1.783882639388544e-77,
+        "p_value_corrected": 3.567765278777088e-77
       }
     ]
   }

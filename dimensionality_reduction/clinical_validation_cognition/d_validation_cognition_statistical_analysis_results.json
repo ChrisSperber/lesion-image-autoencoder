@@ -1,8 +1,8 @@
 {
   "elastic_net_selattention": {
     "anova": {
-      "statistic": 144.17379784528134,
-      "p_value": 1.059997964949727e-73
+      "statistic": 87.14193685301981,
+      "p_value": 2.3537704344407918e-48
     },
     "t_test_posthoc": [
       {
@@ -10,54 +10,54 @@
           "Deep Autoencoder",
           "NMF"
         ],
-        "statistic": 5.477253426886318,
-        "p_value_uncorrected": 1.0552138570516746e-07,
-        "p_value_corrected": 1.0552138570516746e-07
+        "statistic": 5.42447517928271,
+        "p_value_uncorrected": 1.3755477080275367e-07,
+        "p_value_corrected": 2.7510954160550733e-07
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "PCA"
         ],
-        "statistic": -15.741983163011808,
-        "p_value_uncorrected": 3.190343922080573e-39,
-        "p_value_corrected": 1.5951719610402865e-38
+        "statistic": -11.231801765668349,
+        "p_value_uncorrected": 5.950107130665395e-24,
+        "p_value_corrected": 2.9750535653326977e-23
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "Truncated SVD"
         ],
-        "statistic": -8.309835133329727,
-        "p_value_uncorrected": 6.231618962271893e-15,
-        "p_value_corrected": 1.2463237924543786e-14
+        "statistic": -6.942860355279488,
+        "p_value_uncorrected": 3.322850389236653e-11,
+        "p_value_corrected": 9.968551167709959e-11
       },
       {
         "comparison": [
           "NMF",
           "PCA"
         ],
-        "statistic": -16.99330602423013,
-        "p_value_uncorrected": 1.600462877704411e-43,
-        "p_value_corrected": 9.602777266226465e-43
+        "statistic": -13.203722924897077,
+        "p_value_uncorrected": 1.5770003921266005e-30,
+        "p_value_corrected": 9.462002352759604e-30
       },
       {
         "comparison": [
           "NMF",
           "Truncated SVD"
         ],
-        "statistic": -11.622822084425446,
-        "p_value_uncorrected": 3.105182952966722e-25,
-        "p_value_corrected": 1.2420731811866888e-24
+        "statistic": -9.634921733193135,
+        "p_value_uncorrected": 7.065104116078665e-19,
+        "p_value_corrected": 2.826041646431466e-18
       },
       {
         "comparison": [
           "PCA",
           "Truncated SVD"
         ],
-        "statistic": 8.9109191618627,
-        "p_value_uncorrected": 1.0972564274312197e-16,
-        "p_value_corrected": 3.291769282293659e-16
+        "statistic": 3.54153626581502,
+        "p_value_uncorrected": 0.0004747383765909724,
+        "p_value_corrected": 0.0004747383765909724
       }
     ],
     "descriptive_stats": {
@@ -69,28 +69,28 @@
       },
       "NMF": {
         "r2": {
-          "mean": 0.04958932588533974,
-          "std": 0.15955257570399298
+          "mean": 0.04672092611550542,
+          "std": 0.17038970800120923
         }
       },
       "PCA": {
         "r2": {
-          "mean": 0.22437148577103125,
-          "std": 0.12103004247079156
+          "mean": 0.19213080584266504,
+          "std": 0.12409058006931249
         }
       },
       "Truncated SVD": {
         "r2": {
-          "mean": 0.1769214099748994,
-          "std": 0.14237823908959693
+          "mean": 0.16806116297766063,
+          "std": 0.15628020425332517
         }
       }
     }
   },
   "svr_selattention": {
     "anova": {
-      "statistic": 37.07618306089496,
-      "p_value": 2.4195020282400938e-22
+      "statistic": 38.3531158971198,
+      "p_value": 4.651131547561868e-23
     },
     "t_test_posthoc": [
       {
@@ -100,52 +100,52 @@
         ],
         "statistic": -1.190888045000762,
         "p_value_uncorrected": 0.23483154469448053,
-        "p_value_corrected": 0.243457609381174
+        "p_value_corrected": 0.23483154469448053
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "PCA"
         ],
-        "statistic": -9.475705792542813,
-        "p_value_uncorrected": 2.176228938439134e-18,
-        "p_value_corrected": 1.3057373630634804e-17
+        "statistic": -10.620536633357734,
+        "p_value_uncorrected": 5.634566342978927e-22,
+        "p_value_corrected": 3.3807398057873564e-21
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "Truncated SVD"
         ],
-        "statistic": -8.922198003516908,
-        "p_value_uncorrected": 1.0157782732909616e-16,
-        "p_value_corrected": 5.078891366454808e-16
+        "statistic": -7.928839940082278,
+        "p_value_uncorrected": 7.452242842616335e-14,
+        "p_value_corrected": 3.7261214213081676e-13
       },
       {
         "comparison": [
           "NMF",
           "PCA"
         ],
-        "statistic": -5.966897717963977,
-        "p_value_uncorrected": 8.265221279988447e-09,
-        "p_value_corrected": 3.306088511995379e-08
+        "statistic": -6.66500572242214,
+        "p_value_uncorrected": 1.6906863584698816e-10,
+        "p_value_corrected": 6.762745433879526e-10
       },
       {
         "comparison": [
           "NMF",
           "Truncated SVD"
         ],
-        "statistic": -5.395123939091891,
-        "p_value_uncorrected": 1.592768429108902e-07,
-        "p_value_corrected": 4.778305287326706e-07
+        "statistic": -4.722977898487975,
+        "p_value_uncorrected": 3.885045390913393e-06,
+        "p_value_corrected": 7.770090781826785e-06
       },
       {
         "comparison": [
           "PCA",
           "Truncated SVD"
         ],
-        "statistic": 1.5528509766777292,
-        "p_value_uncorrected": 0.121728804690587,
-        "p_value_corrected": 0.243457609381174
+        "statistic": 5.253265520620935,
+        "p_value_uncorrected": 3.2087027517899435e-07,
+        "p_value_corrected": 9.62610825536983e-07
       }
     ],
     "descriptive_stats": {
@@ -163,22 +163,22 @@
       },
       "PCA": {
         "r2": {
-          "mean": 0.1772525258585326,
-          "std": 0.15039911881860585
+          "mean": 0.18306793594725823,
+          "std": 0.14750316833629726
         }
       },
       "Truncated SVD": {
         "r2": {
-          "mean": 0.17053248552003913,
-          "std": 0.15352884950310344
+          "mean": 0.16116367028320464,
+          "std": 0.14736795010050957
         }
       }
     }
   },
   "elastic_net_wordfluency": {
     "anova": {
-      "statistic": 9.183063762257127,
-      "p_value": 5.687929843354405e-06
+      "statistic": 16.601150025198006,
+      "p_value": 1.8880323462132726e-10
     },
     "t_test_posthoc": [
       {
@@ -186,87 +186,87 @@
           "Deep Autoencoder",
           "NMF"
         ],
-        "statistic": 1.4867654238361792,
-        "p_value_uncorrected": 0.1383419033055156,
-        "p_value_corrected": 0.28360439262049286
+        "statistic": 1.4536937013480211,
+        "p_value_uncorrected": 0.14729045048559802,
+        "p_value_corrected": 0.29458090097119605
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "PCA"
         ],
-        "statistic": -1.678342532751023,
-        "p_value_uncorrected": 0.09453479754016429,
-        "p_value_corrected": 0.28360439262049286
+        "statistic": -4.081565998992735,
+        "p_value_uncorrected": 6.029397778746854e-05,
+        "p_value_corrected": 0.00024117591114987416
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "Truncated SVD"
         ],
-        "statistic": 3.525120662781854,
-        "p_value_uncorrected": 0.0005036455460268643,
-        "p_value_corrected": 0.0025182277301343215
+        "statistic": 2.5469857578426907,
+        "p_value_uncorrected": 0.011468404208478968,
+        "p_value_corrected": 0.0344052126254369
       },
       {
         "comparison": [
           "NMF",
           "PCA"
         ],
-        "statistic": -2.6363207338054546,
-        "p_value_uncorrected": 0.008907712151616938,
-        "p_value_corrected": 0.03563084860646775
+        "statistic": -4.589464017820721,
+        "p_value_uncorrected": 7.051296145679801e-06,
+        "p_value_corrected": 3.5256480728399006e-05
       },
       {
         "comparison": [
           "NMF",
           "Truncated SVD"
         ],
-        "statistic": 1.6247312398047653,
-        "p_value_uncorrected": 0.10548492678254892,
-        "p_value_corrected": 0.28360439262049286
+        "statistic": 0.7776760856711133,
+        "p_value_uncorrected": 0.43749825362540107,
+        "p_value_corrected": 0.43749825362540107
       },
       {
         "comparison": [
           "PCA",
           "Truncated SVD"
         ],
-        "statistic": 8.486620211526553,
-        "p_value_uncorrected": 1.9286881668513052e-15,
-        "p_value_corrected": 1.1572129001107832e-14
+        "statistic": 10.678103320061949,
+        "p_value_uncorrected": 3.6843394751114445e-22,
+        "p_value_corrected": 2.2106036850668666e-21
       }
     ],
     "descriptive_stats": {
       "Deep Autoencoder": {
         "r2": {
-          "mean": 0.0352442052693315,
-          "std": 0.09276052940253326
+          "mean": 0.03534971263466859,
+          "std": 0.09223689257669032
         }
       },
       "NMF": {
         "r2": {
-          "mean": 0.026159052318427647,
-          "std": 0.09291898867371498
+          "mean": 0.02668643493717411,
+          "std": 0.09032787283419423
         }
       },
       "PCA": {
         "r2": {
-          "mean": 0.044672733400852475,
-          "std": 0.10758337079817624
+          "mean": 0.060428475463420644,
+          "std": 0.11225561196002459
         }
       },
       "Truncated SVD": {
         "r2": {
-          "mean": 0.014175293054136933,
-          "std": 0.11784125953205715
+          "mean": 0.02144817876379532,
+          "std": 0.10997600943359999
         }
       }
     }
   },
   "svr_wordfluency": {
     "anova": {
-      "statistic": 47.837452512942136,
-      "p_value": 2.7565841766541936e-28
+      "statistic": 47.21807181539648,
+      "p_value": 5.982082885154284e-28
     },
     "t_test_posthoc": [
       {
@@ -283,45 +283,45 @@
           "Deep Autoencoder",
           "PCA"
         ],
-        "statistic": -8.891151453369018,
-        "p_value_uncorrected": 1.255992839224863e-16,
-        "p_value_corrected": 6.279964196124315e-16
+        "statistic": -8.238529318670654,
+        "p_value_uncorrected": 9.963441923072717e-15,
+        "p_value_corrected": 3.985376769229087e-14
       },
       {
         "comparison": [
           "Deep Autoencoder",
           "Truncated SVD"
         ],
-        "statistic": -8.054992663120156,
-        "p_value_uncorrected": 3.3003628947471887e-14,
-        "p_value_corrected": 1.3201451578988755e-13
+        "statistic": -9.02609795280848,
+        "p_value_uncorrected": 4.9789773652107324e-17,
+        "p_value_corrected": 2.489488682605366e-16
       },
       {
         "comparison": [
           "NMF",
           "PCA"
         ],
-        "statistic": 1.5102841744057995,
-        "p_value_uncorrected": 0.1322388650792521,
-        "p_value_corrected": 0.2644777301585042
+        "statistic": 1.987013001421746,
+        "p_value_uncorrected": 0.048016798902769234,
+        "p_value_corrected": 0.14405039670830772
       },
       {
         "comparison": [
           "NMF",
           "Truncated SVD"
         ],
-        "statistic": 1.8412256156206266,
-        "p_value_uncorrected": 0.06677803426268894,
-        "p_value_corrected": 0.20033410278806682
+        "statistic": 1.046599486337603,
+        "p_value_uncorrected": 0.2962992228258282,
+        "p_value_corrected": 0.2962992228258282
       },
       {
         "comparison": [
           "PCA",
           "Truncated SVD"
         ],
-        "statistic": 0.8321714717803238,
-        "p_value_uncorrected": 0.4061095501378943,
-        "p_value_corrected": 0.4061095501378943
+        "statistic": -1.6966046619672834,
+        "p_value_uncorrected": 0.091021095653999,
+        "p_value_corrected": 0.182042191307998
       }
     ],
     "descriptive_stats": {
@@ -339,14 +339,14 @@
       },
       "PCA": {
         "r2": {
-          "mean": 0.0370184454386903,
-          "std": 0.14152063502703224
+          "mean": 0.032438183674896454,
+          "std": 0.15133480916670922
         }
       },
       "Truncated SVD": {
         "r2": {
-          "mean": 0.03379335628611692,
-          "std": 0.15161312181987185
+          "mean": 0.04052182395508483,
+          "std": 0.14467514931346176
         }
       }
     }

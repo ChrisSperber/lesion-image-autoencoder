@@ -17,39 +17,35 @@ BAYESIAN_OPTIMISATION_ITERATIONS_SVR = 50
 RNG_SEED = 9001
 
 
-def load_masked_vectorised_images(
-    lesion_path_list: list[str], min_lesion_threshold: int
+def load_vectorised_images(
+    lesion_path_list: list[str],
+    noise_threshold: float = BINARISATION_THRESHOLD_ORIG_LESION,
 ) -> np.ndarray:
-    """Load lesion segmentations from NIfTI files and return a 2D array of relevant features.
+    """Load lesion segmentations from NIfTI files and return a 2D array.
 
     Each image is flattened into a 1D vector (row), resulting in a 2D matrix
-    of shape (n_subjects, n_voxels). Voxels with little to no lesion coverage are masked away.
+    of shape (n_subjects, n_voxels).
 
     Args:
         lesion_path_list: List of file paths to 3D lesion NIfTI images. All images must have the
             same shape.
-        min_lesion_threshold: minimum number of lesions per voxel to be included. Voxels that are
-            lesioned less than this threshold are masked away from the output. Lesions are defined
-            binarily as voxels with a p value above BINARISATION_THRESHOLD_ORIG_LESION
+        noise_threshold: All values below this threshold are set to 0, mirroring the procedures in
+            the autoencoder dataset.
 
     Returns:
-        2D NumPy array of shape (n_images, n_included_voxels).
+        2D NumPy array of shape (n_images, n_voxels).
 
     """
     images = []
     for path in lesion_path_list:
         img = nib.load(path)
         data = img.get_fdata(dtype=np.float32)
+
+        # Threshold small values to zero
+        data[data < noise_threshold] = 0.0
+
         images.append(data.ravel())
-    images_2d = np.stack(images)
-
-    # set voxels with low p values to 0 to remove noise
-    images_2d[images_2d < BINARISATION_THRESHOLD_ORIG_LESION] = 0
-
-    # remove voxels with little to no information, i.e. which is rarely lesioned
-    nonzero_counts = np.count_nonzero(images_2d, axis=0)
-    voxels_to_keep = nonzero_counts >= min_lesion_threshold
-    return images_2d[:, voxels_to_keep]
+    return np.stack(images)
 
 
 def train_test_split_indices(

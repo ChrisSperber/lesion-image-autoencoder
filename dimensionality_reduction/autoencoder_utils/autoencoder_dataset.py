@@ -13,8 +13,8 @@ class LesionDataset(torch.utils.data.Dataset):
     """PyTorch Dataset for loading and preprocessing 3D lesion segmentation maps from NIfTI files.
 
     This dataset supports minimal on-the-fly preprocessing:
-    - Loads probabilistic lesion masks with values in [0, 1]
-    - Applies thresholding to remove low-probability values which are potential noise (set to 0 to
+    - Loads continuous lesion masks with values in [0, 1]
+    - Applies thresholding to remove low values which are potential noise (set to 0 to
       deactivate)
     - Optionally binarizes the lesion map (0 or 1)
     - Pads the volume to a target shape (e.g., (80, 96, 80))

@@ -21,7 +21,7 @@ from joblib import Parallel, delayed
 from sklearn.metrics import r2_score
 from utils import (
     fit_svr_bayes_opt,
-    load_masked_vectorised_images,
+    load_vectorised_images,
     train_test_split_indices,
 )
 
@@ -67,9 +67,7 @@ latents_baseline = np.load(
 )  # gives lazy access handle to the arrays
 latents_deep_ae = np.load(LATENTS_DEEP_AE)
 
-voxelwise_images_cont = load_masked_vectorised_images(
-    lesion_path_list=lesion_nifti_path_list, min_lesion_threshold=MIN_LESION_THRESHOLD
-)
+voxelwise_images_cont = load_vectorised_images(lesion_path_list=lesion_nifti_path_list)
 voxelwise_images_binary = (voxelwise_images_cont > 0).astype(int)
 
 # in line with previous studies, nihss scores are log transformed to better handle the data
