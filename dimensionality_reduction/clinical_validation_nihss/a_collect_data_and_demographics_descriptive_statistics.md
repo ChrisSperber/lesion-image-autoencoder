@@ -31,6 +31,7 @@ Total number of subjects: 1080
 - Mean: 68.95
 - SD: 15.25
 - Median: 71.65
+- IQR: 59.30 | 80.80 (Q1|Q3)
 - Min: 16.70
 - Max: 98.10
 
@@ -38,6 +39,7 @@ Total number of subjects: 1080
 - Mean: 44964.24
 - SD: 69777.00
 - Median: 17764.00
+- IQR: 4548.00 | 53026.00 (Q1|Q3)
 - Min: 48.00
 - Max: 692424.00
 
@@ -45,6 +47,7 @@ Total number of subjects: 1080
 - Mean: 7.96
 - SD: 6.92
 - Median: 6.00
+- IQR: 3.00 | 12.00 (Q1|Q3)
 - Min: 0.00
 - Max: 39.00
 
@@ -52,5 +55,6 @@ Total number of subjects: 1080
 - Mean: 4.67
 - SD: 5.76
 - Median: 3.00
+- IQR: 1.00 | 6.00 (Q1|Q3)
 - Min: 0.00
 - Max: 36.00
