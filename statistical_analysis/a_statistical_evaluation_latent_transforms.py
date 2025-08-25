@@ -38,6 +38,8 @@ ALPHA = 0.05  # statistical significance threshold for visualisation
 methods = ["PCA", "TruncSVD", "NMF", "DeepAE"]
 data_types = ["Binary", "Continuous"]
 
+METHODS_PLOT_NAMES = ["PCA", "SVD", "NMF", "DeepAE"]
+
 # %%
 # read csv files with reconstruction errors, unify column names
 recon_errors_df_baseline = pd.read_csv(RECONSTRUCTION_ERRORS_PCA_SVD_NMF, delimiter=";")
@@ -129,7 +131,9 @@ for xtick, method in enumerate(methods):
     median = medians[f"Binary{method}"]
     ax.plot([xtick - 0.2, xtick + 0.2], [median, median], color="black", lw=2)
 
-plt.title("Binary Data Reconstruction Performance")
+ax.set_xticklabels(METHODS_PLOT_NAMES)
+
+plt.title("Binary Data Reconstruction Fidelity")
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig("results_binary_reconstruction.png", dpi=300, bbox_inches="tight")
@@ -156,8 +160,10 @@ for xtick, method in enumerate(methods):
     ax.plot([xtick - 0.2, xtick + 0.2], [median, median], color="black", lw=2)
 
 plt.ylim(bottom=0.0, top=0.035)
+ax.set_xticklabels(METHODS_PLOT_NAMES)
+ax.set_ylabel("Reconstruction Mean Absolute Error")
 
-plt.title("Continuous Data Reconstruction Mean Absolute Error")
+plt.title("Continuous Data Reconstruction Error")
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig("results_continuous_reconstruction.png", dpi=300, bbox_inches="tight")

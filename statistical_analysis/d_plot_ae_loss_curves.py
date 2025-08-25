@@ -104,7 +104,7 @@ savepath = Path(__file__).with_name(Path(__file__).stem + "_continuous" + ".png"
 plot_training_curves(
     cont_metrics,
     patience=15,
-    title="Autoencoder training binary data",
+    title="Autoencoder training continuous data",
     savepath=savepath,
 )
 
