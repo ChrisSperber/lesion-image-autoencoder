@@ -1,55 +1,10 @@
 {
   "elastic_net_selattention": {
     "anova": {
-      "statistic": 87.14193685301981,
-      "p_value": 2.3537704344407918e-48
+      "statistic": 87.14193685301963,
+      "p_value": 2.353770434441327e-48
     },
     "t_test_posthoc": [
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "NMF"
-        ],
-        "statistic": 5.42447517928271,
-        "p_value_uncorrected": 1.3755477080275367e-07,
-        "p_value_corrected": 2.7510954160550733e-07
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "PCA"
-        ],
-        "statistic": -11.231801765668349,
-        "p_value_uncorrected": 5.950107130665395e-24,
-        "p_value_corrected": 2.9750535653326977e-23
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "Truncated SVD"
-        ],
-        "statistic": -6.942860355279488,
-        "p_value_uncorrected": 3.322850389236653e-11,
-        "p_value_corrected": 9.968551167709959e-11
-      },
-      {
-        "comparison": [
-          "NMF",
-          "PCA"
-        ],
-        "statistic": -13.203722924897077,
-        "p_value_uncorrected": 1.5770003921266005e-30,
-        "p_value_corrected": 9.462002352759604e-30
-      },
-      {
-        "comparison": [
-          "NMF",
-          "Truncated SVD"
-        ],
-        "statistic": -9.634921733193135,
-        "p_value_uncorrected": 7.065104116078665e-19,
-        "p_value_corrected": 2.826041646431466e-18
-      },
       {
         "comparison": [
           "PCA",
@@ -58,21 +13,54 @@
         "statistic": 3.54153626581502,
         "p_value_uncorrected": 0.0004747383765909724,
         "p_value_corrected": 0.0004747383765909724
+      },
+      {
+        "comparison": [
+          "PCA",
+          "NMF"
+        ],
+        "statistic": 13.203722924897077,
+        "p_value_uncorrected": 1.5770003921266005e-30,
+        "p_value_corrected": 9.462002352759604e-30
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Deep Autoencoder"
+        ],
+        "statistic": 11.231801765668349,
+        "p_value_uncorrected": 5.950107130665395e-24,
+        "p_value_corrected": 2.9750535653326977e-23
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "NMF"
+        ],
+        "statistic": 9.634921733193135,
+        "p_value_uncorrected": 7.065104116078665e-19,
+        "p_value_corrected": 2.826041646431466e-18
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "Deep Autoencoder"
+        ],
+        "statistic": 6.942860355279488,
+        "p_value_uncorrected": 3.322850389236653e-11,
+        "p_value_corrected": 9.968551167709959e-11
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Deep Autoencoder"
+        ],
+        "statistic": -5.42447517928271,
+        "p_value_uncorrected": 1.3755477080275367e-07,
+        "p_value_corrected": 2.7510954160550733e-07
       }
     ],
     "descriptive_stats": {
-      "Deep Autoencoder": {
-        "r2": {
-          "mean": 0.10769700039708031,
-          "std": 0.12823652186021756
-        }
-      },
-      "NMF": {
-        "r2": {
-          "mean": 0.04672092611550542,
-          "std": 0.17038970800120923
-        }
-      },
       "PCA": {
         "r2": {
           "mean": 0.19213080584266504,
@@ -83,6 +71,18 @@
         "r2": {
           "mean": 0.16806116297766063,
           "std": 0.15628020425332517
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.04672092611550542,
+          "std": 0.17038970800120923
+        }
+      },
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.10769700039708031,
+          "std": 0.12823652186021756
         }
       }
     }
@@ -95,72 +95,60 @@
     "t_test_posthoc": [
       {
         "comparison": [
-          "Deep Autoencoder",
-          "NMF"
-        ],
-        "statistic": -1.190888045000762,
-        "p_value_uncorrected": 0.23483154469448053,
-        "p_value_corrected": 0.23483154469448053
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "PCA"
-        ],
-        "statistic": -10.620536633357734,
-        "p_value_uncorrected": 5.634566342978927e-22,
-        "p_value_corrected": 3.3807398057873564e-21
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "Truncated SVD"
-        ],
-        "statistic": -7.928839940082278,
-        "p_value_uncorrected": 7.452242842616335e-14,
-        "p_value_corrected": 3.7261214213081676e-13
-      },
-      {
-        "comparison": [
-          "NMF",
-          "PCA"
-        ],
-        "statistic": -6.66500572242214,
-        "p_value_uncorrected": 1.6906863584698816e-10,
-        "p_value_corrected": 6.762745433879526e-10
-      },
-      {
-        "comparison": [
-          "NMF",
-          "Truncated SVD"
-        ],
-        "statistic": -4.722977898487975,
-        "p_value_uncorrected": 3.885045390913393e-06,
-        "p_value_corrected": 7.770090781826785e-06
-      },
-      {
-        "comparison": [
           "PCA",
           "Truncated SVD"
         ],
         "statistic": 5.253265520620935,
         "p_value_uncorrected": 3.2087027517899435e-07,
         "p_value_corrected": 9.62610825536983e-07
+      },
+      {
+        "comparison": [
+          "PCA",
+          "NMF"
+        ],
+        "statistic": 6.66500572242214,
+        "p_value_uncorrected": 1.6906863584698816e-10,
+        "p_value_corrected": 6.762745433879526e-10
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Deep Autoencoder"
+        ],
+        "statistic": 10.620536633357734,
+        "p_value_uncorrected": 5.634566342978927e-22,
+        "p_value_corrected": 3.3807398057873564e-21
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "NMF"
+        ],
+        "statistic": 4.722977898487975,
+        "p_value_uncorrected": 3.885045390913393e-06,
+        "p_value_corrected": 7.770090781826785e-06
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "Deep Autoencoder"
+        ],
+        "statistic": 7.928839940082278,
+        "p_value_uncorrected": 7.452242842616335e-14,
+        "p_value_corrected": 3.7261214213081676e-13
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Deep Autoencoder"
+        ],
+        "statistic": 1.190888045000762,
+        "p_value_uncorrected": 0.23483154469448053,
+        "p_value_corrected": 0.23483154469448053
       }
     ],
     "descriptive_stats": {
-      "Deep Autoencoder": {
-        "r2": {
-          "mean": 0.09107600264273581,
-          "std": 0.14096251811409838
-        }
-      },
-      "NMF": {
-        "r2": {
-          "mean": 0.10618703390941465,
-          "std": 0.20746720801718613
-        }
-      },
       "PCA": {
         "r2": {
           "mean": 0.18306793594725823,
@@ -172,60 +160,27 @@
           "mean": 0.16116367028320464,
           "std": 0.14736795010050957
         }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.10618703390941465,
+          "std": 0.20746720801718613
+        }
+      },
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.09107600264273581,
+          "std": 0.14096251811409838
+        }
       }
     }
   },
   "elastic_net_wordfluency": {
     "anova": {
-      "statistic": 16.601150025198006,
-      "p_value": 1.8880323462132726e-10
+      "statistic": 16.601150025198137,
+      "p_value": 1.8880323462129303e-10
     },
     "t_test_posthoc": [
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "NMF"
-        ],
-        "statistic": 1.4536937013480211,
-        "p_value_uncorrected": 0.14729045048559802,
-        "p_value_corrected": 0.29458090097119605
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "PCA"
-        ],
-        "statistic": -4.081565998992735,
-        "p_value_uncorrected": 6.029397778746854e-05,
-        "p_value_corrected": 0.00024117591114987416
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "Truncated SVD"
-        ],
-        "statistic": 2.5469857578426907,
-        "p_value_uncorrected": 0.011468404208478968,
-        "p_value_corrected": 0.0344052126254369
-      },
-      {
-        "comparison": [
-          "NMF",
-          "PCA"
-        ],
-        "statistic": -4.589464017820721,
-        "p_value_uncorrected": 7.051296145679801e-06,
-        "p_value_corrected": 3.5256480728399006e-05
-      },
-      {
-        "comparison": [
-          "NMF",
-          "Truncated SVD"
-        ],
-        "statistic": 0.7776760856711133,
-        "p_value_uncorrected": 0.43749825362540107,
-        "p_value_corrected": 0.43749825362540107
-      },
       {
         "comparison": [
           "PCA",
@@ -234,21 +189,54 @@
         "statistic": 10.678103320061949,
         "p_value_uncorrected": 3.6843394751114445e-22,
         "p_value_corrected": 2.2106036850668666e-21
+      },
+      {
+        "comparison": [
+          "PCA",
+          "NMF"
+        ],
+        "statistic": 4.589464017820721,
+        "p_value_uncorrected": 7.051296145679801e-06,
+        "p_value_corrected": 3.5256480728399006e-05
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Deep Autoencoder"
+        ],
+        "statistic": 4.081565998992735,
+        "p_value_uncorrected": 6.029397778746854e-05,
+        "p_value_corrected": 0.00024117591114987416
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "NMF"
+        ],
+        "statistic": -0.7776760856711133,
+        "p_value_uncorrected": 0.43749825362540107,
+        "p_value_corrected": 0.43749825362540107
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "Deep Autoencoder"
+        ],
+        "statistic": -2.5469857578426907,
+        "p_value_uncorrected": 0.011468404208478968,
+        "p_value_corrected": 0.0344052126254369
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Deep Autoencoder"
+        ],
+        "statistic": -1.4536937013480211,
+        "p_value_uncorrected": 0.14729045048559802,
+        "p_value_corrected": 0.29458090097119605
       }
     ],
     "descriptive_stats": {
-      "Deep Autoencoder": {
-        "r2": {
-          "mean": 0.03534971263466859,
-          "std": 0.09223689257669032
-        }
-      },
-      "NMF": {
-        "r2": {
-          "mean": 0.02668643493717411,
-          "std": 0.09032787283419423
-        }
-      },
       "PCA": {
         "r2": {
           "mean": 0.060428475463420644,
@@ -260,60 +248,27 @@
           "mean": 0.02144817876379532,
           "std": 0.10997600943359999
         }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.02668643493717411,
+          "std": 0.09032787283419423
+        }
+      },
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": 0.03534971263466859,
+          "std": 0.09223689257669032
+        }
       }
     }
   },
   "svr_wordfluency": {
     "anova": {
-      "statistic": 47.21807181539648,
-      "p_value": 5.982082885154284e-28
+      "statistic": 47.21807181539636,
+      "p_value": 5.982082885155516e-28
     },
     "t_test_posthoc": [
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "NMF"
-        ],
-        "statistic": -9.75673345820341,
-        "p_value_uncorrected": 2.9711134432280974e-19,
-        "p_value_corrected": 1.7826680659368586e-18
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "PCA"
-        ],
-        "statistic": -8.238529318670654,
-        "p_value_uncorrected": 9.963441923072717e-15,
-        "p_value_corrected": 3.985376769229087e-14
-      },
-      {
-        "comparison": [
-          "Deep Autoencoder",
-          "Truncated SVD"
-        ],
-        "statistic": -9.02609795280848,
-        "p_value_uncorrected": 4.9789773652107324e-17,
-        "p_value_corrected": 2.489488682605366e-16
-      },
-      {
-        "comparison": [
-          "NMF",
-          "PCA"
-        ],
-        "statistic": 1.987013001421746,
-        "p_value_uncorrected": 0.048016798902769234,
-        "p_value_corrected": 0.14405039670830772
-      },
-      {
-        "comparison": [
-          "NMF",
-          "Truncated SVD"
-        ],
-        "statistic": 1.046599486337603,
-        "p_value_uncorrected": 0.2962992228258282,
-        "p_value_corrected": 0.2962992228258282
-      },
       {
         "comparison": [
           "PCA",
@@ -322,21 +277,54 @@
         "statistic": -1.6966046619672834,
         "p_value_uncorrected": 0.091021095653999,
         "p_value_corrected": 0.182042191307998
+      },
+      {
+        "comparison": [
+          "PCA",
+          "NMF"
+        ],
+        "statistic": -1.987013001421746,
+        "p_value_uncorrected": 0.048016798902769234,
+        "p_value_corrected": 0.14405039670830772
+      },
+      {
+        "comparison": [
+          "PCA",
+          "Deep Autoencoder"
+        ],
+        "statistic": 8.238529318670654,
+        "p_value_uncorrected": 9.963441923072717e-15,
+        "p_value_corrected": 3.985376769229087e-14
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "NMF"
+        ],
+        "statistic": -1.046599486337603,
+        "p_value_uncorrected": 0.2962992228258282,
+        "p_value_corrected": 0.2962992228258282
+      },
+      {
+        "comparison": [
+          "Truncated SVD",
+          "Deep Autoencoder"
+        ],
+        "statistic": 9.02609795280848,
+        "p_value_uncorrected": 4.9789773652107324e-17,
+        "p_value_corrected": 2.489488682605366e-16
+      },
+      {
+        "comparison": [
+          "NMF",
+          "Deep Autoencoder"
+        ],
+        "statistic": 9.75673345820341,
+        "p_value_uncorrected": 2.9711134432280974e-19,
+        "p_value_corrected": 1.7826680659368586e-18
       }
     ],
     "descriptive_stats": {
-      "Deep Autoencoder": {
-        "r2": {
-          "mean": -0.03660962547400982,
-          "std": 0.1369649330712687
-        }
-      },
-      "NMF": {
-        "r2": {
-          "mean": 0.049593514130078335,
-          "std": 0.14187487180550495
-        }
-      },
       "PCA": {
         "r2": {
           "mean": 0.032438183674896454,
@@ -347,6 +335,18 @@
         "r2": {
           "mean": 0.04052182395508483,
           "std": 0.14467514931346176
+        }
+      },
+      "NMF": {
+        "r2": {
+          "mean": 0.049593514130078335,
+          "std": 0.14187487180550495
+        }
+      },
+      "Deep Autoencoder": {
+        "r2": {
+          "mean": -0.03660962547400982,
+          "std": 0.1369649330712687
         }
       }
     }
