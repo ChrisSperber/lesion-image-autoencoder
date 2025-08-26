@@ -41,7 +41,7 @@ MODALITY_NAME_MAP = {
 }
 MODEL_NAME_MAP = {
     "elastic_net": "Elastic Net Regression",
-    "svr": "Support Vector Regression",
+    "svr": "SVR",
 }
 METHODS_PLOT_NAMES = ["PCA", "SVD", "NMF", "DeepAE"]
 
