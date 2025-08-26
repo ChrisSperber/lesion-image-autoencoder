@@ -46,6 +46,8 @@ MODEL_NAME_MAP = {
     "elastic_net_wordfluency": "Word Fluency Elastic Net Regression",
     "svr_wordfluency": "Word Fluency Support Vector Regression",
 }
+METHODS_PLOT_NAMES = ["PCA", "SVD", "NMF", "DeepAE"]
+ORDER = ["PCA", "Truncated SVD", "NMF", "Deep Autoencoder"]
 
 METHODS = ["elastic_net", "svr"]
 COGNITION_DEFICITS = ["selective_attention", "word_fluency"]
@@ -104,20 +106,23 @@ for model_name, df in results_dfs.items():
 
     ######
     # Plot
-    df["mod_pretty"] = df[MODALITY].map(MODALITY_NAME_MAP)
+    df["mod_pretty"] = pd.Categorical(
+        df[MODALITY].map(MODALITY_NAME_MAP), categories=ORDER, ordered=True
+    )
 
     model_name_pretty = MODEL_NAME_MAP[model_name]
 
     plt.figure(figsize=(5, 6))
-    ax = sns.swarmplot(data=df, x="mod_pretty", y=R2_SCORE, size=2)
+    ax = sns.swarmplot(data=df, x="mod_pretty", y=R2_SCORE, size=2, order=ORDER)
 
-    means = df.groupby("mod_pretty")[R2_SCORE].mean()
+    means = df.groupby("mod_pretty")[R2_SCORE].mean().reindex(ORDER)
     for xtick, modality in enumerate(means.index):
         mean_val = means[modality]
         ax.plot([xtick - 0.2, xtick + 0.2], [mean_val, mean_val], color="black", lw=2)
 
     title_str = f"{model_name_pretty} — R2 Scores"
     ax.set_xlabel("")
+    ax.set_xticklabels(METHODS_PLOT_NAMES)
     plt.title(title_str)
     plt.xticks(rotation=45)
     plt.tight_layout()

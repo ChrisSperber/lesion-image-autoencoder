@@ -43,6 +43,7 @@ MODEL_NAME_MAP = {
     "elastic_net": "Elastic Net Regression",
     "svr": "Support Vector Regression",
 }
+METHODS_PLOT_NAMES = ["PCA", "SVD", "NMF", "DeepAE"]
 
 MODALITY = "modality"
 R2_SCORE = "r2"
@@ -107,6 +108,7 @@ def _get_modality_subset(df, data_type: str) -> pd.DataFrame:
 # %%
 # main analyses
 statistical_results = {}
+order = [MODALITY_NAME_MAP[m] for m in MODALITIES]
 formatted_tables = defaultdict(dict)  # model_name -> metric table (DataFrame)
 
 for model_name, df in results_dfs.items():
@@ -118,11 +120,16 @@ for model_name, df in results_dfs.items():
         print(f"  Data type: {data_type}")
 
         df_subset = _get_modality_subset(df, data_type)
+        df_subset["mod_pretty"] = pd.Categorical(
+            df_subset["mod_pretty"], categories=order, ordered=True
+        )
 
         plt.figure(figsize=(5, 6))
-        ax = sns.swarmplot(data=df_subset, x="mod_pretty", y=R2_SCORE, size=2)
+        ax = sns.swarmplot(
+            data=df_subset, x="mod_pretty", y=R2_SCORE, size=2, order=order
+        )
 
-        means = df_subset.groupby("mod_pretty")[R2_SCORE].mean()
+        means = df_subset.groupby("mod_pretty")[R2_SCORE].mean().reindex(order)
         for xtick, modality in enumerate(means.index):
             mean_val = means[modality]
             ax.plot(
@@ -131,8 +138,9 @@ for model_name, df in results_dfs.items():
 
         model_name_pretty = MODEL_NAME_MAP[model_name]
 
-        title_str = f"{model_name_pretty} — R2 Scores ({data_type})"
+        title_str = f"{model_name_pretty} ({data_type})"
         ax.set_xlabel("")
+        ax.set_xticklabels(METHODS_PLOT_NAMES)
         plt.title(title_str)
         plt.xticks(rotation=45)
         plt.tight_layout()
