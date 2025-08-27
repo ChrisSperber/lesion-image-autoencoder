@@ -41,10 +41,10 @@ MODALITY_NAME_MAP = {
     "images_compressed_deep_ae": "Deep Autoencoder",
 }
 MODEL_NAME_MAP = {
-    "elastic_net_selattention": "Selective Attention Elastic Net Regression",
-    "svr_selattention": "Selective Attention Support Vector Regression",
-    "elastic_net_wordfluency": "Word Fluency Elastic Net Regression",
-    "svr_wordfluency": "Word Fluency Support Vector Regression",
+    "elastic_net_selattention": "Selective Attention - Elastic Net Regression",
+    "svr_selattention": "Selective Attention - SVR",
+    "elastic_net_wordfluency": "Word Fluency - Elastic Net Regression",
+    "svr_wordfluency": "Word Fluency - SVR",
 }
 METHODS_PLOT_NAMES = ["PCA", "SVD", "NMF", "DeepAE"]
 ORDER = ["PCA", "Truncated SVD", "NMF", "Deep Autoencoder"]
@@ -120,7 +120,7 @@ for model_name, df in results_dfs.items():
         mean_val = means[modality]
         ax.plot([xtick - 0.2, xtick + 0.2], [mean_val, mean_val], color="black", lw=2)
 
-    title_str = f"{model_name_pretty} — R2 Scores"
+    title_str = model_name_pretty
     ax.set_xlabel("")
     ax.set_xticklabels(METHODS_PLOT_NAMES)
     plt.title(title_str)
