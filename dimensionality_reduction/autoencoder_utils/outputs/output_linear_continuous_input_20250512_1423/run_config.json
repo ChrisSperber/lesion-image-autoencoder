@@ -1,0 +1,10 @@
+{
+  "device": "cuda",
+  "epochs": 500,
+  "lr": 0.001,
+  "batch_size_linear": 64,
+  "batch_size_deep": 1,
+  "patience_early_stopping": 15,
+  "patience_reduce_lr": 5,
+  "debug_mode": false
+}

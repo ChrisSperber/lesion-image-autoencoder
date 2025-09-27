@@ -3,6 +3,12 @@
 *autoencoder_full.pt
 *.png
 
+# linear autoencoder weights were too large for standard github; can be dropped as
+# they were dropped anyway from the final report
+20250512_0957_best_autoencoder_weights.pt
+20250512_1423_best_autoencoder_weights.pt
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
