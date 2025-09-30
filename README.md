@@ -45,10 +45,24 @@ pip install -r requirements.txt
 The main analysis scripts are sequentially ordered with alphabetic prefixes. See docstrings for further information.
 
 ---
+## Autoencoder models and weights
+The autoencoder models and weights can be applied to other data, requiring
+- the defined model architecture in autoencoder_utils/models
+- the stored model weights in autoencoder_utils/outputs
+- the dataset class (aka data loader) autoencoder_utils/outputs/autoencoder_dataset.py
+- several utility functions from dimensionality_reduction/utils.py
 
-## Details on input data
+Note: A control condition included simple, linear autoencoders. These were dropped from the final manuscript and the weights were not uploaded to the repo, also due to their size being above the standard limit of Github.
+
+---
+
+### Details on input data
 All input data are stroke lesion segmentations normalised into a common space, as documented in data_collection/a_verify_and_collect_lesion_data.csv.
 The current models were trained on images with a size of 79 x 95 x 79 voxels, which were preprocessed and padded by the Dataset class defined in dimensionality_reduction/autoencoder_utils/autoencoder_dataset.py
+
+---
+### Hardware
+The code was written and executed in Python (PyTorch v2.1.0, torchvision v0.22.0) on a desktop workstation with an NVIDIA GeForce GTX 1650 GPU (4 GB VRAM), an AMD Ryzen 5 3600 6-core CPU, and 16 GB RAM. GPU acceleration was implemented with CUDA 11.8.
 
 ---
 ### Reusability
